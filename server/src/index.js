@@ -1,6 +1,7 @@
 import express from "express"
 import dotenv from "dotenv"
 import cors from "cors"
+import { GlobalErrorHandler } from "./utils/GlobalError";
 
 const app = express();
 dotenv.config({
@@ -16,6 +17,8 @@ app.get("/",(req,res)=>{
         message:"Hi from server"
     })
 })
+
+app.use(GlobalErrorHandler)
 
 const PORT = process.env.PORT || 4000
 
