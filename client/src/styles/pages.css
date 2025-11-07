@@ -1,0 +1,63 @@
+/* pets page */
+#filter-holder{
+    width: 100%;
+    background-color: var(--primary-color);
+    padding: 30px;
+    border-radius: 10px;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    justify-content: center;
+    gap: 20px;
+}
+
+#search-holder{
+    max-width: 350px;
+    display: flex;
+    gap: 10px;
+}
+
+#search-holder input{
+    flex: 7;
+}
+
+#search-holder button{
+    flex: 2;
+}
+#card-holder{
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 40px 40px;
+    flex-wrap: wrap;
+    margin: 30px auto;
+}
+
+#profile-holder{
+    max-width: 300px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#profile-holder img{
+    width: 100%;
+    border-radius: 50%;
+}
+
+#profile-holder #user-name{
+    font-size: 2rem;
+    font-weight: 600;
+    display: block;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#profile-holder button{
+    max-width: 250px;
+    margin-top: 10px;
+}
