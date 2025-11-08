@@ -79,3 +79,36 @@ export const userNavbar = [
         route: "/wishlist"
     }
 ]
+
+export const pet = [
+   {
+        field : "petname",
+        placeholder : "Enter your pet name",
+        type : "text",
+        name : "name"
+    },
+    {
+        field : "breed",
+        placeholder : "Enter your pet breed",
+        type : "text",
+        name : "breed"
+    },
+    {
+        field : "description",
+        placeholder : "Enter your pet description",
+        type : "textarea",
+        name : "description"
+    },
+    {
+        field : "age",
+        placeholder : "Enter your pet age",
+        type : "number",
+        name : "age"
+    },
+    {
+        field : "category",
+        placeholder : "select pet category",
+        type : "select",
+        name : "category"
+    }
+]
