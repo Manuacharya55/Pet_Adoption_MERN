@@ -48,6 +48,11 @@ const PetSchema = new Schema(
             type: Boolean,
             default: false,
         },
+        shop:{
+            type: Schema.Types.ObjectId,
+            ref: 'Shop',
+            required: true,
+        }
     },
     { timestamps: true }
 );

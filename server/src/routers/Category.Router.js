@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  getActiveCategory,
+  addCategory,
   getAllCategory,
   updateCategory,
 } from "../controllers/Category.Controller.js";
@@ -8,13 +8,13 @@ import {
 const router = express.Router();
 
 // Get Active Categories
-router.get("/active", getActiveCategory);
+// router.get("/active", getActiveCategory);
 
 // Get All Categories
 router.get("/", getAllCategory);
-
+router.post("/", addCategory);
 // Update Category (Toggle isActive)
-router.put("/:categoryId", updateCategory);
+router.patch("/:categoryId", updateCategory);
 
 export default router;
 

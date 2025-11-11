@@ -7,6 +7,8 @@ import { AsyncHandler } from "../utils/AsyncHandler.js";
 export const addAddress = AsyncHandler(async (req, res) => {
   const { phonenumber, address, district, state, lng, lat } = req.body;
 
+  const {_id: userId} = req.user;
+
   if (!phonenumber || !address || !district || !state || !lng || !lat) {
     throw new ApiError(400, "Please provide all required fields");
   }
@@ -15,6 +17,11 @@ export const addAddress = AsyncHandler(async (req, res) => {
     throw new ApiError(400, "Longitude and latitude must be numbers");
   }
 
+  const addressExists = await Address.findOne({ user: userId });
+  if (addressExists) {
+    throw new ApiError(400, "Address already exists for this user");
+  }
+  
   const newAddress = await Address.create({
     phonenumber,
     address,
@@ -22,6 +29,7 @@ export const addAddress = AsyncHandler(async (req, res) => {
     state,
     lng: Number(lng),
     lat: Number(lat),
+    user: userId,
   });
 
   res

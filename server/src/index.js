@@ -1,9 +1,16 @@
 import express from "express"
 import dotenv from "dotenv"
 import cors from "cors"
-import { GlobalErrorHandler } from "./utils/GlobalError";
+import { GlobalErrorHandler } from "./utils/GlobalError.js";
+import connectDB from "./db/index.js";
+import authRouter from "./routers/Auth.Router.js"
+import addressRouter from "./routers/Address.Router.js"
+import categoryRouter from "./routers/Category.Router.js";
+import shopRouter from "./routers/Shop.Router.js";
 
+connectDB();
 const app = express();
+
 dotenv.config({
     path:"../.env"
 });
@@ -17,6 +24,12 @@ app.get("/",(req,res)=>{
         message:"Hi from server"
     })
 })
+
+
+app.use("/api/v1/auth",authRouter);
+app.use("/api/v1/address",addressRouter);
+app.use("/api/v1/category",categoryRouter);
+app.use("/api/v1/shop",shopRouter);
 
 app.use(GlobalErrorHandler)
 

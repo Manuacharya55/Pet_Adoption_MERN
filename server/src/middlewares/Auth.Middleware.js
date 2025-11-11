@@ -6,7 +6,7 @@ import { AsyncHandler } from '../utils/AsyncHandler.js';
 export const verifyUser = AsyncHandler(async (req, res, next) => {
     // Get token from header
     const token = req.headers.token;
-    
+    console.log(token)
     if (!token) {
        throw new ApiError(401, 'No token provided');
     }

@@ -3,6 +3,7 @@ import { ApiError } from "../utils/AppError.js";
 import { ApiSuccess } from "../utils/AppSuccess.js";
 import { generateToken } from "../utils/GenerateToken.js";
 import { AsyncHandler } from "../utils/AsyncHandler.js";
+import Address from "../models/Address.Model.js";
 
 // Register User
 export const registerUser = AsyncHandler(async (req, res) => {
@@ -72,33 +73,36 @@ export const loginUser = AsyncHandler(async (req, res) => {
 
 // Get User Profile
 export const profile = AsyncHandler(async (req, res) => {
-  const userId = req.user?.userId;
-
+  const userId = req.user?._id;
+  console.log(userId);
   if (!userId) {
     throw new ApiError(401, "User not authenticated");
   }
 
-  const user = await User.findById(userId).populate("address");
+  const user = await User.findById(userId);
   if (!user) {
     throw new ApiError(404, "User not found");
   }
 
+  const address = await Address.findOne({user: userId});
   // Convert to object and remove password
   const data = {
     _id: user._id,
     fullname: user.fullname,
     email: user.email,
     avatar: user.avatar,
-    address: user.address,
+    address: address,
   };
+  
   res
     .status(200)
     .json(new ApiSuccess(200, data, "Profile retrieved successfully"));
 });
 
+
 // Update User Profile
 export const updateProfile = AsyncHandler(async (req, res) => {
-  const userId = req.user?.userId;
+  const userId = req.user?._id;
 
   if (!userId) {
     throw new ApiError(401, "User not authenticated");
@@ -123,6 +127,7 @@ export const updateProfile = AsyncHandler(async (req, res) => {
     email: user.email,
     avatar: user.avatar,
   };
+
   res
     .status(200)
     .json(new ApiSuccess(200, data, "Profile updated successfully"));

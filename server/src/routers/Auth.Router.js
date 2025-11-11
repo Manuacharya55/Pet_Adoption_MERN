@@ -5,6 +5,7 @@ import {
   profile,
   updateProfile,
 } from "../controllers/Auth.Controller.js";
+import { verifyUser } from "../middlewares/Auth.Middleware.js";
 
 const router = express.Router();
 
@@ -15,10 +16,10 @@ router.post("/register", registerUser);
 router.post("/login", loginUser);
 
 // Get User Profile
-router.get("/profile", profile);
+router.get("/profile/", verifyUser,profile);
 
 // Update User Profile
-router.put("/profile", updateProfile);
+router.patch("/profile", verifyUser,updateProfile);
 
 export default router;
 

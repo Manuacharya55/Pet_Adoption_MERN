@@ -1,5 +1,6 @@
 import Pet from "../models/Pet.Model.js";
 import Category from "../models/Category.Model.js";
+import Shop from "../models/Shop.Model.js";
 import { ApiError } from "../utils/AppError.js";
 import { ApiSuccess } from "../utils/AppSuccess.js";
 import { AsyncHandler } from "../utils/AsyncHandler.js";
@@ -69,6 +70,7 @@ export const addPet = AsyncHandler(async (req, res) => {
     price,
     image,
     description,
+    shop
   } = req.body;
 
   if (
@@ -80,10 +82,22 @@ export const addPet = AsyncHandler(async (req, res) => {
     !gender ||
     !price ||
     !image ||
-    !description
+    !description||
+    !shop
   ) {
     throw new ApiError(400, "Please provide all required fields");
   }
+
+  const existingShop = await Shop.findById(shop);
+  if (!existingShop) {
+    throw new ApiError(404, "Shop not found");
+  }
+
+  const existingCategory = await Category.findById(category);
+  if (!existingCategory) {
+    throw new ApiError(404, "Category not found");
+  }
+
   const newPet = await Pet.create({
     petName,
     breed,
@@ -94,10 +108,9 @@ export const addPet = AsyncHandler(async (req, res) => {
     price,
     image,
     description,
+    shop
   });
-  if (!newPet) {
-    throw new ApiError(400, "Failed to add pet");
-  }
+
   res.status(201).json(new ApiSuccess(201, newPet, "Pet added successfully"));
 });
 
