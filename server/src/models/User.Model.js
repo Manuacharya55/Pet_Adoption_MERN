@@ -1,57 +1,53 @@
-import mongoose from 'mongoose';
+import {Schema, model} from 'mongoose';
 import bcrypt from 'bcrypt';
+import jwt from "jsonwebtoken";
 
-const { Schema, model } = mongoose;
-
-const UserSchema = new Schema(
-    {
-        fullname: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-        },
-        password: {
-            type: String,
-            required: true,
-            select: false,
-        },
-        role: {
-            type: String,
-            enum: ['user', 'admin', 'shopkeeper'],
-            default: 'user',
-        },
-        address: {
-            type: Schema.Types.ObjectId,
-            ref: 'Address',
-        },
-        avatar: {
-            type: String,
-            trim: true,
-        },
+const UserSchema = new Schema({
+    fullname:{
+        type:String,
+        required : true
     },
-    { timestamps: true }
-);
-
-// Hash password before save
-UserSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) return next();
-    try {
-        const salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password, salt);
-        return next();
-    } catch (err) {
-        return next(err);
+    email:{
+        type:String,
+        required:true,
+        unique:true
+    },
+    password:{
+        type:String,
+        required:true,
+    },
+    address:{
+        type:Schema.Types.ObjectId,
+        ref :'Address'
+    },
+    role:{
+        type:String,
+        enum:["user","admin","shopkeeper"],
+        default:"user"
+    },
+    shop:{
+        type:Schema.Types.ObjectId,
+        ref:'Shop'
     }
 });
 
-// Instance method to compare passwords
-UserSchema.methods.comparePassword = async function (candidatePassword) {
-    return bcrypt.compare(candidatePassword, this.password);
-};
+UserSchema.pre("save",async function(next){
+    if(!this.isModified("password")) return next()
+    
+    this.password = await bcrypt.hash(this.password,10);
+    return next()
+})
 
-export default model('User', UserSchema);
+UserSchema.methods.comparePassword = async function(password){
+    return bcrypt.compare(password,this.password)
+}
+
+UserSchema.methods.generateToken = async function(){
+    return await jwt.sign({
+        _id:this._id,
+        role:this.role
+    },process.env.JWT_SECRET)
+}
+
+const User = model("User",UserSchema);
+export default User;

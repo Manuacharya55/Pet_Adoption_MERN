@@ -1,35 +1,45 @@
-import Address from "../models/Address.Model.js";
+import { AsyncHandler } from "../utils/AsyncHandler.js";
 import { ApiError } from "../utils/AppError.js";
 import { ApiSuccess } from "../utils/AppSuccess.js";
-import { AsyncHandler } from "../utils/AsyncHandler.js";
+import User from "../models/User.Model.js";
+import Address from "../models/Address.Model.js";
 
-// Add Address
 export const addAddress = AsyncHandler(async (req, res) => {
-  const { phonenumber, address, district, state, lng, lat } = req.body;
-
-  const {_id: userId} = req.user;
-
-  if (!phonenumber || !address || !district || !state || !lng || !lat) {
-    throw new ApiError(400, "Please provide all required fields");
+  const { country, state, district, phonenumber, address, lat, lng } = req.body;
+  const { _id } = req.user;
+  console.log("hiiii");
+  if (
+    !country ||
+    !state ||
+    !district ||
+    !phonenumber ||
+    !address ||
+    !lat ||
+    !lng
+  ) {
+    throw ApiError(401, "All fields are required");
   }
 
-  if (typeof Number(lng) !== "number" || typeof Number(lat) !== "number") {
-    throw new ApiError(400, "Longitude and latitude must be numbers");
+  const existingAddress = await Address.findOne({ user: _id });
+
+  console.log(existingAddress);
+  if (existingAddress) {
+    throw new ApiError(400, "Address exists already");
   }
 
-  const addressExists = await Address.findOne({ user: userId });
-  if (addressExists) {
-    throw new ApiError(400, "Address already exists for this user");
-  }
-  
   const newAddress = await Address.create({
+    country,
+    state,
+    district,
     phonenumber,
     address,
-    district,
-    state,
-    lng: Number(lng),
-    lat: Number(lat),
-    user: userId,
+    lat,
+    lng,
+    user: _id,
+  });
+
+  const user = await User.findByIdAndUpdate(_id, {
+    $set: { address: newAddress._id },
   });
 
   res
@@ -37,34 +47,39 @@ export const addAddress = AsyncHandler(async (req, res) => {
     .json(new ApiSuccess(201, newAddress, "Address added successfully"));
 });
 
-// Update Address
 export const updateAddress = AsyncHandler(async (req, res) => {
+  const { country, state, district, phonenumber, address, lat, lng } = req.body;
   const { addressId } = req.params;
-  const { phonenumber, address, district, state, lng, lat } = req.body;
 
-  if (!addressId) {
-    throw new ApiError(400, "Address ID is required");
+  if (
+    !country ||
+    !state ||
+    !district ||
+    !phonenumber ||
+    !address ||
+    !lat ||
+    !lng
+  ) {
+    throw ApiError(401, "All fields are required");
   }
 
-  const updatedAddress = await Address.findByIdAndUpdate(
-    addressId,
-    {
-      $set: {
-        phonenumber,
-        address,
-        district,
-        state,
-        lng: Number(lng),
-        lat: Number(lat),
-      },
+  const existingAddress = await Address.findByIdAndUpdate(addressId, {
+    $set: {
+      country: country,
+      state: state,
+      district: district,
+      phonenumber: phonenumber,
+      address: address,
+      lat: lat,
+      lng: lng,
     },
-    { new: true }
-  );
-  if (!updatedAddress) {
-    throw new ApiError(404, "Address not found");
+  });
+
+  if (!existingAddress) {
+    throw new ApiError(400, "No Such Address exists");
   }
 
   res
-    .status(200)
-    .json(new ApiSuccess(200, updatedAddress, "Address updated successfully"));
+    .status(201)
+    .json(new ApiSuccess(201, existingAddress, "Address added successfully"));
 });

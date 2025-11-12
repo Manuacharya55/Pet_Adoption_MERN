@@ -1,12 +1,7 @@
 import express from "express"
 import dotenv from "dotenv"
 import cors from "cors"
-import { GlobalErrorHandler } from "./utils/GlobalError.js";
-import connectDB from "./db/index.js";
-import authRouter from "./routers/Auth.Router.js"
-import addressRouter from "./routers/Address.Router.js"
-import categoryRouter from "./routers/Category.Router.js";
-import shopRouter from "./routers/Shop.Router.js";
+import connectDB from "./db/index.js"
 
 connectDB();
 const app = express();
@@ -25,11 +20,14 @@ app.get("/",(req,res)=>{
     })
 })
 
+import authRouter from "./router/User.router.js";
+import addressRouter from "./router/Address.router.js";
+
+import { GlobalErrorHandler } from "./utils/GlobalError.js";
 
 app.use("/api/v1/auth",authRouter);
 app.use("/api/v1/address",addressRouter);
-app.use("/api/v1/category",categoryRouter);
-app.use("/api/v1/shop",shopRouter);
+
 
 app.use(GlobalErrorHandler)
 

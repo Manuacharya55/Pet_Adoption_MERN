@@ -1,43 +1,40 @@
-import { Schema, model } from 'mongoose';
+import {Schema,model} from "mongoose";
 
-const AddressSchema = new Schema(
-    {
-        phonenumber: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        address: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        district: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        state: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        lng: {
-            type: Number,
-            required: true,
-        },
-        lat: {
-            type: Number,
-            required: true,
-        },
-        user:{
-            type: Schema.Types.ObjectId,
-            ref:"User",
-            required:true,
-        }
+const addressSchema = new Schema({
+    user:{
+        type:Schema.Types.ObjectId,
+        required:true,
+        ref:"Users"
     },
-    { timestamps: true }
-);
+    country:{
+        type:String,
+        required:true
+    },
+    state:{
+        type:String,
+        required:true
+    },
+    district:{
+        type:String,
+        required:true
+    },
+    phonenumber:{
+        type:Number,
+        required:true
+    },
+    address:{
+        type:String,
+        required:true
+    },
+    lat:{
+        type:Number,
+        required:true
+    },
+    lng:{
+        type:Number,
+        required:true
+    }
+})
 
-export default model('Address', AddressSchema);
-
+const Address = model("Address",addressSchema);
+export default Address;

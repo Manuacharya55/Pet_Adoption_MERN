@@ -19,7 +19,7 @@ function App() {
     <Route path="/" element={<Register/>}/>
     <Route path="/login" element={<Login/>}/>
     <Route path="/register" element={<Register/>}/>
-    <Route path="/address" element={<Address/>}/>
+    <Route path="/add-address" element={<Address/>}/>
     <Route path="/edit-address" element={<Address/>}/>
     <Route path="/component" element={<Footer/>}/>
     <Route path="/home" element={<HomePage/>}/>
