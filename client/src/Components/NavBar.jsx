@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { LuCircleUserRound } from "react-icons/lu";
 import { IoCloseSharp } from "react-icons/io5";
 import { TbMenu2 } from "react-icons/tb";
-import { userNavbar } from "../Utils/Form";
+import { adminNavbar, userNavbar } from "../Utils/Form";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,7 +14,7 @@ const NavBar = () => {
         <h1 id="logo">The Happy Paws</h1>
 
         <ul>
-          {userNavbar.map((route) => (
+          {adminNavbar.map((route) => (
             <li className="hideonmobile">
               <NavLink to={route.route}>{route.name}</NavLink>
             </li>

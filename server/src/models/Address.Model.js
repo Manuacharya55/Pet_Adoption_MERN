@@ -4,7 +4,7 @@ const addressSchema = new Schema({
     user:{
         type:Schema.Types.ObjectId,
         required:true,
-        ref:"Users"
+        ref:"User"
     },
     country:{
         type:String,

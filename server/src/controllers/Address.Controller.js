@@ -73,7 +73,7 @@ export const updateAddress = AsyncHandler(async (req, res) => {
       lat: lat,
       lng: lng,
     },
-  });
+  },{new:true});
 
   if (!existingAddress) {
     throw new ApiError(400, "No Such Address exists");
@@ -83,3 +83,19 @@ export const updateAddress = AsyncHandler(async (req, res) => {
     .status(201)
     .json(new ApiSuccess(201, existingAddress, "Address added successfully"));
 });
+
+export const getAddress = AsyncHandler(async(req,res)=>{
+  const {addressId} = req.params;
+
+  if(!addressId){
+    throw new ApiError(401,"No such address")
+  }
+
+  const address = await Address.findById(addressId);
+
+  if(!address){
+    throw new ApiError(401,"No such address")
+  }
+
+  res.status(201).json(new ApiSuccess(201,address,"address fetched successfully"))
+})

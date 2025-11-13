@@ -1,0 +1,20 @@
+import {mongoose,model, Schema} from "mongoose";
+
+const CategorySchema = new Schema({
+    name:{
+        type:String,
+        required:true,
+        unique:true
+    },
+    image:{
+        type:String,
+        required:true
+    },
+    isActive:{
+        type:Boolean,
+        default:true
+    }
+},{timestamps:true});
+
+const Category = model("Category",CategorySchema);
+export default Category;

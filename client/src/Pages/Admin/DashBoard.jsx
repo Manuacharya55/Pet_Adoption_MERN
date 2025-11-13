@@ -1,8 +1,11 @@
 import React from 'react'
+import NavBar from '../../Components/NavBar'
 
 const DashBoard = () => {
   return (
-    <div>DashBoard</div>
+    <>
+      <NavBar/>
+    </>
   )
 }
 

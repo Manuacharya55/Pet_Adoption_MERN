@@ -80,6 +80,29 @@ export const userNavbar = [
     }
 ]
 
+export const adminNavbar = [
+    {
+        name : "home",
+        route: "/admin/dashboard"
+    },
+    {
+        name : "category",
+        route: "/admin/categories"
+    },
+    {
+        name : "pets",
+        route: "/admin/pets"
+    },
+    {
+        name : "shops",
+        route: "/admin/shops"
+    },
+    {
+        name : "users",
+        route: "/admin/users"
+    }
+]
+
 export const pet = [
    {
         field : "petname",
