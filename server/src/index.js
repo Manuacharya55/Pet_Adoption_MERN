@@ -24,6 +24,7 @@ import authRouter from "./router/User.router.js";
 import addressRouter from "./router/Address.router.js";
 import shopRouter from "./router/Shop.router.js"
 import categoryRouter from "./router/Category.router.js"
+import petRouter from "./router/Pets.router.js"
 
 import { GlobalErrorHandler } from "./utils/GlobalError.js";
 
@@ -31,6 +32,7 @@ app.use("/api/v1/auth",authRouter);
 app.use("/api/v1/address",addressRouter);
 app.use("/api/v1/shop",shopRouter);
 app.use("/api/v1/category",categoryRouter);
+app.use("/api/v1/pet",petRouter);
 
 
 app.use(GlobalErrorHandler)

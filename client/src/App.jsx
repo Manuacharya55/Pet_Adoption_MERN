@@ -18,6 +18,8 @@ import DashBoard from "./Pages/Admin/DashBoard";
 import Categories from "./Pages/Admin/Categories";
 import Users from "./Pages/Admin/Users";
 import Shops from "./Pages/Admin/Shops";
+import Dashboard from "./Pages/Shop/Dashboard";
+import Requests from "./Pages/Shop/Requests";
 
 function App() {
   return (
@@ -40,7 +42,10 @@ function App() {
         <Route path="/become-shopkeeper" element={<BecomeShopKeeper />} />
         <Route path="/address/:id" element={<EditAddress />} />
 
+{/* shopkeeper routes */}
+        <Route path="/shopkeeper/dashboard" element={<Dashboard />} />
         <Route path="/shopkeeper/pets" element={<Pets />} />
+        <Route path="/shopkeeper/request" element={<Requests />} />
         <Route path="/shopkeeper/addpet" element={<AddPet />} />
         <Route path="/shopkeeper/editpet/:id" element={<EditPet />} />
 

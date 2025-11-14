@@ -42,6 +42,7 @@ const Categories = () => {
   }, [token]);
 
   const addCategory = async (e) => {
+    setIsSubmitting(true)
     e.preventDefault();
     if (!token) return;
 
@@ -59,6 +60,7 @@ const Categories = () => {
 
     console.log(response.data);
     setCategories((prev) => [...prev, response.data.data]);
+    setIsSubmitting(false)
   };
 
   const handleChange = (e) => {
@@ -82,7 +84,8 @@ const Categories = () => {
       <NavBar />
       <div id="container">
         <h1 id="heading">categories</h1>
-        <form onSubmit={addCategory}>
+        <div id="form-holder">
+          <form onSubmit={addCategory}>
           <input
             type="text"
             placeholder="Enter category name"
@@ -97,8 +100,9 @@ const Categories = () => {
             isSubmitting={isSubmitting}
           />
         </form>
+        </div>
 
-        <div id="category-holder">
+        <div id="card-holder">
           {categories.length === 0
             ? "No Categories yet"
             : categories.map((category) => (

@@ -145,6 +145,12 @@ body,
   }
 }
 
+#form-holder{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 20px 0px;
+}
 @media (max-width: 600px) {
   .auth,
   .address {

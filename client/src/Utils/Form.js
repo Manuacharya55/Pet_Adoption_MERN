@@ -80,6 +80,20 @@ export const userNavbar = [
     }
 ]
 
+export const shopkeeperNavbar = [
+    {
+        name : "home",
+        route: "/shopkeeper/dashboard"
+    },
+    {
+        name : "pets",
+        route: "/shopkeeper/pets"
+    },
+    {
+        name : "request",
+        route: "/shopkeeper/request"
+    }
+]
 export const adminNavbar = [
     {
         name : "home",

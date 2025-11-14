@@ -15,7 +15,7 @@ nav {
   justify-content: space-between;
 }
 
-#logo{
+#logo {
   font-family: "Puppies Play";
   font-style: italic;
   font-size: 2rem;
@@ -23,7 +23,7 @@ nav {
   letter-spacing: 3px;
 }
 
-nav #logo{
+nav #logo {
   color: var(--primary-color);
 }
 nav ul {
@@ -52,6 +52,12 @@ nav ul a:hover {
   color: var(--primary-color);
 }
 
+nav ul a.active{
+  /* background-color: var(--primary-color);
+  padding: 8px 15px;
+  border-radius: 8px; */
+  color: var(--primary-color)
+}
 .hamburger {
   display: none;
   cursor: pointer;
@@ -103,106 +109,113 @@ nav ul a:hover {
   color: lightgrey;
 }
 
-
 /* footer */
-footer{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-        color: white;
+footer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  color: white;
 }
 
-#footer-header{
-    padding: 20px;
-    background-color:var(--primary-color);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+#footer-header {
+  padding: 20px;
+  background-color: var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-footer ul{
-    margin-top: 20px;
-    display: flex;
-    list-style: none;
-    gap: 20px;
+footer ul {
+  margin-top: 20px;
+  display: flex;
+  list-style: none;
+  gap: 20px;
 }
 
-footer ul a{
-    text-decoration: none;
-        color: white;
+footer ul a {
+  text-decoration: none;
+  color: white;
 }
-#footer-bottom{
-    padding: 20px;
-    text-align: center;
-    background-color: var(--secondary);
+#footer-bottom {
+  padding: 20px;
+  text-align: center;
+  background-color: var(--secondary);
 }
-
 
 /* card component */
-.card{
+.card {
   width: 280px;
   height: auto;
 }
 
-.card img{
+.card img {
   width: 280px;
   height: 280px;
   border-radius: 10px;
 }
 
-.card .card-heading{
+.card .card-heading {
   font-size: 2rem;
   font-weight: 700;
   text-transform: capitalize;
-
 }
 
-.price-holder{
+.price-holder {
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.price-holder .pet-category{
+.price-holder .pet-category {
   color: grey;
 }
 
-.price-holder .price{
+.price-holder .price {
   font-size: 1.5rem;
   font-weight: 600;
 }
 
-.btn-holder{
+.btn-holder {
   width: 100%;
   padding: 10px 0px;
   display: flex;
   align-items: center;
-    gap: 15px;
+  gap: 15px;
 }
 
 /* remove it */
-button{
+button {
   width: 100%;
   padding: 10px;
   border: none;
   border-radius: 25px;
   background-color: var(--primary-color);
   color: white;
-
 }
 
-button:nth-child(1){
+button:nth-child(1) {
   background-color: white;
   border: 1px solid var(--primary-color);
   color: var(--primary-color);
 }
 
-.error{
+.error {
   font-size: 1rem;
   color: red;
   margin-top: 0px;
 }
+
+/* select */
+
+select {
+  appearance: none;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid lightgrey;
+}
+
+
 
 @media (max-width: 850px) {
   nav {
@@ -225,7 +238,7 @@ button:nth-child(1){
     color: white;
   }
 
-  .error{
+  .error {
     font-size: 10px;
   }
 }

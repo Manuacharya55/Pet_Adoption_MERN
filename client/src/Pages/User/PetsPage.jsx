@@ -1,19 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import NavBar from '../../Components/NavBar'
 import Select from '../../Components/ui/Select'
 import Card from '../../Components/Card'
 import Footer from '../../Components/Footer'
+import { useSearchParams } from 'react-router-dom'
 
 const PetsPage = () => {
+    const [params,setParams] = useSearchParams();
+
+    const [query,setQuery] = useState({
+        gender:'all',
+        category:'all'
+    })
+
+    useEffect(()=>{
+        setParams(query)
+    },[query])
+
   return (
     <>
     <NavBar />
     <div id="container">
         <div id="filter-holder">
-            <Select/>
-            <Select/>
-            <Select/>
-            <Select/>
+            <button onClick={()=>{
+                setQuery({gender:"male",category:"cat"})
+            }}>change</button>
         </div>
 
         <h1 id="heading">
