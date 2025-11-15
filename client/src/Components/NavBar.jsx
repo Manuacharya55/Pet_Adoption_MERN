@@ -14,8 +14,8 @@ const NavBar = () => {
         <h1 id="logo">The Happy Paws</h1>
 
         <ul>
-          {shopkeeperNavbar.map((route) => (
-            <li className="hideonmobile">
+          {shopkeeperNavbar.map((route,idx) => (
+            <li className="hideonmobile" key={idx}>
               <NavLink to={route.route}>{route.name}</NavLink>
             </li>
           ))}
@@ -35,8 +35,8 @@ const NavBar = () => {
 
         {/* Mobile Menu */}
         <ul id="menu" className={isOpen ? "open" : ""}>
-          {userNavbar.map((route) => (
-            <li>
+          {userNavbar.map((route,idx) => (
+            <li key={idx}>
               <NavLink to={route.route}>{route.name}</NavLink>
             </li>
           ))}

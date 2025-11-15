@@ -1,12 +1,99 @@
-import React from 'react'
-import NavBar from '../../Components/NavBar'
+import React, { useEffect, useState } from "react";
+import NavBar from "../../Components/NavBar";
+import axios from "axios";
+import { useSearchParams } from "react-router-dom";
+import { GrFormNext, GrFormPrevious } from "react-icons/gr";
+import { useAuth } from "../../Context/AuthContext";
 
 const Pets = () => {
-  return (
-   <>
-      <NavBar/>
-    </>
-  )
-}
+  const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [pets, setPets] = useState();
+  const [params, setParams] = useSearchParams();
+  const token = "";
 
-export default Pets
+  const {value} = useAuth()
+
+  const fetchPets = async () => {
+    console.log(value)
+    setIsLoading(true);
+    const response = await axios.get(
+      `http://localhost:3000/api/v1/admin/pets?page=${page}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+      }
+    );
+
+    console.log(response.data);
+    setPets(response.data.data);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchPets();
+    setParams({ page: page });
+  }, [page, token]);
+
+  return isLoading ? (
+    "Loading..."
+  ) : (
+    <>
+      <NavBar />
+      <div id="container">
+        <h1 id="heading">All Pets</h1>
+
+        <div id="table-holder">
+          <div id="table-option">
+            <button
+              disabled={pets?.currentPage <= 1}
+              onClick={() => setPage((prev) => prev - 1)}
+            >
+              <GrFormPrevious />
+            </button>
+            <span>
+              page : {pets?.currentPage} of {pets?.totalPages}{" "}
+            </span>
+            <button
+              disabled={pets?.currentPage >= pets?.totalPages}
+              onClick={() => setPage((prev) => prev + 1)}
+            >
+              <GrFormNext />
+            </button>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>name</th>
+                <th>gender</th>
+                <th>age</th>
+                <th>price</th>
+                <th>category</th>
+                <th>view details</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pets.pets.length == 0
+                ? "No pets yet"
+                : pets.pets.map((curele) => (
+                    <tr>
+                      <td>{curele?.name}</td>
+                      <td>{curele?.gender}</td>
+                      <td>{curele?.age}</td>
+                      <td>{curele?.price} rs</td>
+                      <td>{curele?.category?.name}</td>
+                      <td><button>view details</button></td>
+                    </tr>
+                  ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Pets;

@@ -4,48 +4,43 @@ import Button from "../../Components/ui/Button";
 import { useState } from "react";
 import { handleUpload } from "../../Utils/Appwrite.js";
 import axios from "axios";
-
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OTEzNTQxZjQyNThlN2EyNmZhZjI5NzQiLCJyb2xlIjoidXNlciIsImlhdCI6MTc2Mjk1NjQ2NX0.4JWD8Lg8zz-Wf5PJc-ufvNpkUdERtmHjiJyHmtemTQk'
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { shopSchema } from "../../Utils/ZodForm.js";
+import { useAuth } from "../../Context/AuthContext.jsx";
+import { usePost } from "../../hooks/apiRequests.js";
+import { toast } from "react-hot-toast";
 
 const BecomeShopKeeper = () => {
-  const [data, setData] = useState({
-    image: "",
-    shopname: "",
-  });
+  const url = `/shop/register`;
+  const { user } = useAuth();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setValue,
+  } = useForm({ resolver: zodResolver(shopSchema) });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-
-  const onInputChange = (e) => {
-    setData((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
-  };
 
   const handleImageChange = async (e) => {
     const response = await handleUpload(e.target.files[0]);
-    setData((prev) => {
-      return { ...prev, image: response };
-    });
+    console.log(response);
+    setValue("image", response);
   };
 
-  const handleSubmit = async(e) =>{
-    setIsSubmitting(true)
-    e.preventDefault();
-    console.log(data)
-    if(!token) return
+  const myFunc = async (data) => {
+    if (!user?.token) return;
 
-    const response = await axios.post("http://localhost:3000/api/v1/shop/register",data,{
-      headers:{
-        "Content-Type" : "application/json",
-        "token":token
-      }
-    })
-
-    console.log(response.data)
-    navigate(`/address/${response.data.data?.address}`)
-    setIsSubmitting(false)
-  }
+    console.log(user?.token);
+    const response = await usePost(url, user?.token, data);
+    if (response.success) {
+      toast.success(response.message);
+      navigate(`/address/${response.data.address}`);
+    } else {
+      toast.error(response.message);
+    }
+  };
 
   return (
     <div className="auth">
@@ -55,21 +50,25 @@ const BecomeShopKeeper = () => {
       <div className="auth-form">
         <h1 id="title">Become Shopkeeper</h1>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(myFunc)}>
           <input
             type="text"
             name="shopname"
             placeholder="enter your shop name"
-            value={data?.shopname}
-            onChange={onInputChange}
+            {...register("shopname")}
           />
+          {errors?.shopname && (
+            <span className="error">{errors.shopname.message}</span>
+          )}
           <input
             type="file"
             name="image"
-            id=""
             placeholder="add shop image"
             onChange={handleImageChange}
           />
+          {errors?.image && (
+            <span className="error">{errors.image.message}</span>
+          )}
           <Button
             buttonName="become shopkeeper"
             type="main"

@@ -9,6 +9,7 @@ import ShopsPage from "./Pages/User/ShopsPage";
 import Wishlist from "./Pages/User/Wishlist";
 import ProfilePage from "./Pages/Shared/ProfilePage";
 import Pets from "./Pages/Shop/Pets";
+import AllPets from "./Pages/Admin/Pets"
 import AddPet from "./Pages/Shop/AddPet";
 import EditPet from "./Pages/Shop/EditPet";
 import EditProfile from "./Pages/Shared/EditProfile";
@@ -20,6 +21,8 @@ import Users from "./Pages/Admin/Users";
 import Shops from "./Pages/Admin/Shops";
 import Dashboard from "./Pages/Shop/Dashboard";
 import Requests from "./Pages/Shop/Requests";
+import ShopDescription from "./Pages/User/ShopDescription";
+import PetDescription from "./Pages/User/PetDescription";
 
 function App() {
   return (
@@ -29,10 +32,11 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        <Route path="/component" element={<Footer />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/pets" element={<PetsPage />} />
+        <Route path="/pets/:id" element={<PetDescription />} />
         <Route path="/shops" element={<ShopsPage />} />
+        <Route path="/shops/:id" element={<ShopDescription />} />
         <Route path="/wishlist" element={<Wishlist />} />
 
         <Route path="/profile" element={<ProfilePage />} />
@@ -49,11 +53,12 @@ function App() {
         <Route path="/shopkeeper/addpet" element={<AddPet />} />
         <Route path="/shopkeeper/editpet/:id" element={<EditPet />} />
 
+
         {/* admin routes */}
         <Route path="/admin/dashboard" element={<DashBoard />} />
         <Route path="/admin/categories" element={<Categories />} />
         <Route path="/admin/users" element={<Users />} />
-        <Route path="/admin/pets" element={<Pets />} />
+        <Route path="/admin/pets" element={<AllPets />} />
         <Route path="/admin/shops" element={<Shops />} />
       </Routes>
     </BrowserRouter>

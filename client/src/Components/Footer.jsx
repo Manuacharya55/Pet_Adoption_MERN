@@ -8,8 +8,8 @@ const Footer = ({ array }) => {
         <div id="footer-header">
           <h1 id="logo">The Happy paws</h1>
           <ul>
-            {userNavbar.map((route) => (
-              <li>
+            {userNavbar.map((route,idx) => (
+              <li key={idx}>
                 <NavLink to={route.route}>{route.name}</NavLink>
               </li>
             ))}

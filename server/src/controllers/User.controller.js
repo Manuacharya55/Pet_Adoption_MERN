@@ -22,7 +22,15 @@ export const createUser = AsyncHandler(async (req, res) => {
     password,
   });
 
-  res.status(201).json(new ApiSuccess(201, user, "User Created Successfully"));
+  const token = await user.generateToken();
+
+  const data = {
+    token : token,
+    role : user.role,
+    email : user.email
+  }
+
+  res.status(201).json(new ApiSuccess(201, data, "User Created Successfully"));
 });
 
 export const loginUser = AsyncHandler(async (req, res) => {

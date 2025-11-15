@@ -1,41 +1,31 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Card from "../../Components/Card";
 import NavBar from "../../Components/NavBar";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OTEzNTQxZjQyNThlN2EyNmZhZjI5NzQiLCJyb2xlIjoidXNlciIsImlhdCI6MTc2Mjk1NjQ2NX0.4JWD8Lg8zz-Wf5PJc-ufvNpkUdERtmHjiJyHmtemTQk";
+import { useAuth } from "../../Context/AuthContext";
+import { useGet } from "../../hooks/apiRequests";
 
 const Pets = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [pets, setPets] = useState([]);
+  const url = `/pet/mypets`;
+  const { user } = useAuth();
 
   const fetchPets = async () => {
     setIsLoading(true);
-    if (!token) return;
+    if (!user?.token) return;
 
-    const response = await axios.get(
-      "http://localhost:3000/api/v1/pet/mypets",
-
-      {
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      }
-    );
-    console.log(response);
-    setPets(response.data.data);
+    const response = await useGet(url, user?.token);
+    setPets(response.data);
     setIsLoading(false);
   };
 
   useEffect(() => {
     fetchPets();
-  }, []);
+  }, [user?.token]);
 
-  return (
+  return isLoading ? "Loading..." : (
     <>
       <NavBar></NavBar>
       <div id="container">
@@ -48,20 +38,24 @@ const Pets = () => {
         <h1 id="heading">Your pets</h1>
 
         <div id="card-holder">
-          {pets.length === 0 ? "No pets yet": pets.map((pet) => (
-            <Card heading={pet.name} img={pet.image} key={pet._id}>
-              <div className="price-holder">
-                <span className="pet-category">{pet.category.name}</span>
-                <span className="price">{pet.price}₹</span>
-              </div>
-              <div className="btn-holder">
-                <button
-                onClick={()=> navigate(`/shopkeeper/editpet/${pet._id}`)}
-                >edit</button>
-                <button>delete</button>
-              </div>
-            </Card>
-          ))}
+          {pets.length === 0
+            ? "No pets yet"
+            : pets.map((pet) => (
+                <Card heading={pet.name} img={pet.image} key={pet._id}>
+                  <div className="price-holder">
+                    <span className="pet-category">{pet.category.name}</span>
+                    <span className="price">{pet.price}₹</span>
+                  </div>
+                  <div className="btn-holder">
+                    <button
+                      onClick={() => navigate(`/shopkeeper/editpet/${pet._id}`)}
+                    >
+                      edit
+                    </button>
+                    <button>delete</button>
+                  </div>
+                </Card>
+              ))}
         </div>
       </div>
     </>

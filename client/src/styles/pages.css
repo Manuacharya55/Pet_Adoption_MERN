@@ -1,91 +1,218 @@
 /* pets page */
-#filter-holder{
+#filter-holder {
+  width: 100%;
+  background-color: var(--primary-color);
+  padding: 30px;
+  border-radius: 10px;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  justify-content: center;
+  gap: 20px;
+}
+
+#search-holder {
+  max-width: 350px;
+  display: flex;
+  gap: 10px;
+}
+
+#navigation {
+  display: flex;
+  padding: 20px 0px;
+  width: 100%;
+  align-items: center;
+}
+
+#navigation button {
+  width: 150px;
+  border-radius: 10px;
+  background-color: var(--primary-color);
+  color: white;
+}
+
+#navigation #add {
+  margin-left: auto;
+}
+
+#search-holder input {
+  flex: 7;
+}
+
+#search-holder button {
+  flex: 2;
+}
+
+#card-holder {
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 40px 40px;
+  flex-wrap: wrap;
+  margin: 30px auto;
+}
+
+#profile-holder {
+  max-width: 250px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#category-holder {
+  max-width: 250px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#profile-holder img {
+  width: 100%;
+  border-radius: 50%;
+}
+
+#profile-holder #user-name {
+  font-size: 2rem;
+  font-weight: 600;
+  display: block;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#profile-holder button {
+  max-width: 250px;
+  margin-top: 10px;
+}
+
+/* pet description */
+#pet-description-card,
+#pet-attributes-card,
+#shop-description-card {
+  width: 100%;
+  /* border: 1px solid; */
+  padding: 20px;
+}
+
+#pet-description-card {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+
+#pet-attributes-card{
     width: 100%;
-    background-color: var(--primary-color);
-    padding: 30px;
+    border: 1px solid var(--primary-color);
     border-radius: 10px;
+    padding: 20px;
 
     display: flex;
-    flex-wrap: wrap;
-    align-items: start;
-    justify-content: center;
-    gap: 20px;
-}
-
-#search-holder{
-    max-width: 350px;
-    display: flex;
-    gap: 10px;
-}
-
-#navigation{
-    display: flex;
-    padding: 20px 0px;
-    width: 100%;
     align-items: center;
+    justify-content: center;
+    gap: 80px;
+    flex-wrap: wrap;
+    margin-top: 40px;
 }
 
-#navigation button{
-    width: 150px;
-    border-radius: 10px;
+#pet-image img {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+}
+
+#pet-detail {
+  padding: 0px 40px;
+  grid-column: span(2);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#pet-name,
+#pet-price {
+  font-size: 5rem;
+  display: block;
+  font-weight: 600;
+  /* line-height: 30px; */
+}
+
+#pet-name {
+  line-height: 30px;
+  margin-bottom: 2rem;
+}
+
+#pet-description {
+  line-height: 1.8rem;
+  text-align: justify;
+}
+
+#pet-price {
+  line-height: 70px;
+  margin-top: 1rem;
+}
+
+#detail-header,
+#detail-footer {
+  display: flex;
+  flex-direction: column;
+}
+
+.attribute{
+    color: gray;
+    font-size: 1.2rem;
+    margin-bottom: 6px;
+}
+
+.attribute-value{
+    font-size: 2.5rem;
+    text-transform: capitalize;
+    font-weight: 600;
+}
+
+/* shop detail */
+#shop-description-card{
+    padding: 0;
+    width: 100%;
+    display: grid;
+    gap: 30px;
+    grid-template-columns: 1fr 1fr;
+    margin: 40px 0px;
+}
+
+#shop-details{
+    width: 100%;
     background-color: var(--primary-color);
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    padding: 20px 0px;
     color: white;
 }
 
-#navigation #add{
-    margin-left: auto;
-}
-
-#search-holder input{
-    flex: 7;
-}
-
-#search-holder button{
-    flex: 2;
-}
-
-#card-holder{
-    max-width: 1200px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: 40px 40px;
-    flex-wrap: wrap;
-    margin: 30px auto;
-}
-
-#profile-holder{
-    max-width: 250px;
-    margin: 20px auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-#category-holder{
-    max-width: 250px;
-    margin: 20px auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-#profile-holder img{
-    width: 100%;
+#shop-details img{
+    width: 200px;
     border-radius: 50%;
 }
 
-#profile-holder #user-name{
-    font-size: 2rem;
-    font-weight: 600;
-    display: block;
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-#profile-holder button{
+#shop-details button{
+    background-color: white;
     max-width: 250px;
-    margin-top: 10px;
+   margin-top: 30px;
+    color: var(--primary-color);
+}
+#shop-map{
+    width: 100%;
+    border-radius: 10px;
+    border-radius: 10px;
+    overflow: hidden;
 }

@@ -7,7 +7,7 @@ import Address from "../models/Address.Model.js";
 export const addAddress = AsyncHandler(async (req, res) => {
   const { country, state, district, phonenumber, address, lat, lng } = req.body;
   const { _id } = req.user;
-  console.log("hiiii");
+
   if (
     !country ||
     !state ||

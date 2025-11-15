@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import NavBar from "../../Components/NavBar";
 import Form from "../../Components/Form";
 import { pet } from "../../Utils/Form";
-import PetForm from "../../Components/shop/PetForm";
+import PetForm from "../../Components/Forms/PetForm";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 

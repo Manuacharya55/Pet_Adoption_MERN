@@ -3,8 +3,9 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "../../Components/ui/Button";
-import axios from "axios";
-
+import { usePost } from "../../hooks/apiRequests";
+import toast from "react-hot-toast";
+import { useAuth } from "../../Context/AuthContext";
 
 const registerSchema = z.object({
   fullname: z.string().min(2, "Name must have atleast 2 characters"),
@@ -12,7 +13,10 @@ const registerSchema = z.object({
   password: z.string().min(6, "password must be atleast 6 characters"),
 });
 
+const url = `/auth/register`;
+
 const Register = () => {
+  const { setToken } = useAuth();
   const {
     register,
     handleSubmit,
@@ -20,21 +24,17 @@ const Register = () => {
     reset,
   } = useForm({ resolver: zodResolver(registerSchema) });
 
-  const navigate = useNavigate()
-  const myFunc = async (data) => {
-    const response = await axios.post(
-      "http://localhost:3000/api/v1/auth/register",
-      data,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+  const navigate = useNavigate();
 
-    console.log(response);
-    navigate("/add-address")
-    reset();
+  const myFunc = async (data) => {
+    const response = await usePost(url, "", data);
+    if (response.success) {
+      toast.success(response.message);
+      setToken(response.data);
+      navigate("/add-address");
+    } else {
+      toast.error(response.message);
+    }
   };
 
   return (

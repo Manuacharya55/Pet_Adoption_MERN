@@ -3,69 +3,55 @@ import NavBar from "../../Components/NavBar";
 import Form from "../../Components/Form";
 import { pet } from "../../Utils/Form";
 import { useNavigate } from "react-router-dom";
-import PetForm from "../../Components/shop/PetForm";
 import axios from "axios";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { petSchema } from "../../Utils/ZodForm";
+import { useGet, usePost } from "../../hooks/apiRequests";
+import { useAuth } from "../../Context/AuthContext";
+import toast from "react-hot-toast";
+import PetForm from "../../Components/Forms/PetForm";
 
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OTEzNTQxZjQyNThlN2EyNmZhZjI5NzQiLCJyb2xlIjoidXNlciIsImlhdCI6MTc2Mjk1NjQ2NX0.4JWD8Lg8zz-Wf5PJc-ufvNpkUdERtmHjiJyHmtemTQk";
 
 const AddPet = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [categories, setCategories] = useState([]);
-  const [data, setData] = useState({
-    name: "",
-    description: "",
-    image: "",
-    age: "",
-    breed: "",
-    price: "",
-    gender: "",
-    category: "",
-  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setValue,
+    reset,
+  } = useForm({ resolver: zodResolver(petSchema) });
 
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const url = `/category/`;
 
   const fetchCategories = async () => {
-    if (!token) return;
-
-    const response = await axios.get(
-      "http://localhost:3000/api/v1/category/",
-
-      {
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      }
-    );
+    if (!user?.token) return;
+    const response = await useGet(url, user?.token);
     console.log(response);
-    setCategories(response.data.data);
+    setCategories(response.data);
     setIsLoading(false);
   };
 
   useEffect(() => {
-    fetchCategories();
-  }, []);
+    if (user?.token) fetchCategories();
+  }, [user?.token]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    console.log("hiii");
-    if (!token) return;
-
-    const response = await axios.post(
-      "http://localhost:3000/api/v1/pet/",
-      data,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      }
-    );
-    console.log(response.data.data);
+  const myFunc = async (data) => {
+    if (!user?.token) return;
+    const response = await usePost("/pet", user?.token, data);
+    if (response.success) {
+      toast.success(response.message);
+      reset();
+    } else {
+      toast.error(response.message);
+    }
   };
+
   return isLoading ? (
     "Loading..."
   ) : (
@@ -73,17 +59,20 @@ const AddPet = () => {
       <NavBar />
       <div id="container">
         <div id="navigation">
-          <button onClick={()=> navigate(-1)}>back</button>
+          <button onClick={() => navigate(-1)}>back</button>
         </div>
 
+        <h1 id="heading">Add Pet</h1>
         <div id="form-holder">
           <PetForm
+            handleSubmit={handleSubmit}
+            myFunc={myFunc}
+            errors={errors}
             isSubmitting={isSubmitting}
+            register={register}
+            setValue={setValue}
             categories={categories}
             buttonName="add pet"
-            data={data}
-            setData={setData}
-            handleSubmit={handleSubmit}
           />
         </div>
       </div>

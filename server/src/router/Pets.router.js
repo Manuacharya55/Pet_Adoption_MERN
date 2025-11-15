@@ -6,8 +6,8 @@ import { addPet, deletePet, getMyPet, getPet, getSinglePet, updatePet } from "..
 const router = express.Router();
 
 router.get("/",verifyJWT,getPet);
-router.get("/mypets",verifyJWT,getMyPet);
 router.post("/",verifyJWT,addPet);
+router.get("/mypets",verifyJWT,getMyPet);
 
 router.get("/:petId",verifyJWT,getSinglePet)
 router.patch("/:petId",verifyJWT,updatePet)
