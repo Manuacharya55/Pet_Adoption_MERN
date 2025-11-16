@@ -74,7 +74,6 @@ const PetsPage = () => {
 
   return (
     <>
-      <NavBar />
       <div id="container">
         <div id="filter-holder">
           <select name="gender" id="" onChange={handleChange}>
@@ -117,7 +116,6 @@ const PetsPage = () => {
           </div>
         )}
       </div>
-      <Footer />
     </>
   );
 };

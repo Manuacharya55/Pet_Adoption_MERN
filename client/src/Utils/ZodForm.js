@@ -23,3 +23,14 @@ export const petSchema = z.object({
   gender: z.enum(["male", "female"]),
   category: z.string().min(3, "Please select right category"),
 });
+
+export const categorySchema = z.object({
+  name: z.string().min(2, "category name should have atleast 2 characters"),
+  image: z.string().min(1, "Image should not be empty"),
+});
+
+export const profileSchema = z.object({
+  fullname: z.string().min(2, "name should have atleast 2 characters"),
+  email: z.string().email("Invalid email format"),
+  image: z.string().min(1, "Image should not be empty"),
+});

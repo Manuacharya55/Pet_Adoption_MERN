@@ -3,7 +3,8 @@ import Card from "../../Components/Card";
 import NavBar from "../../Components/NavBar";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
-import { useGet } from "../../hooks/apiRequests";
+import { useDelete, useGet } from "../../hooks/apiRequests";
+import toast from "react-hot-toast";
 
 const Pets = () => {
   const navigate = useNavigate();
@@ -25,9 +26,21 @@ const Pets = () => {
     fetchPets();
   }, [user?.token]);
 
+  const deletePet = async(id) =>{
+    if(!user?.token) return
+
+    const response = await useDelete(`/pet/${id}`,user?.token);
+    if(response.success){
+      toast.success(response.message)
+      setPets(prev =>{
+        prev.filter(pet=> pet._id !== id)
+      })
+    }else{
+      toast.error(response.message)
+    }
+  }
   return isLoading ? "Loading..." : (
     <>
-      <NavBar></NavBar>
       <div id="container">
         <div id="navigation">
           <button id="add" onClick={() => navigate("/shopkeeper/addpet")}>
@@ -38,7 +51,7 @@ const Pets = () => {
         <h1 id="heading">Your pets</h1>
 
         <div id="card-holder">
-          {pets.length === 0
+          {pets?.length === 0
             ? "No pets yet"
             : pets.map((pet) => (
                 <Card heading={pet.name} img={pet.image} key={pet._id}>
@@ -52,7 +65,9 @@ const Pets = () => {
                     >
                       edit
                     </button>
-                    <button>delete</button>
+                    <button onClick={()=>{
+                      deletePet(pet?._id)
+                    }}>delete</button>
                   </div>
                 </Card>
               ))}

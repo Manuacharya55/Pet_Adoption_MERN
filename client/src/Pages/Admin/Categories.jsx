@@ -1,112 +1,90 @@
 import { useState } from "react";
 import NavBar from "../../Components/NavBar";
-import Button from "../../Components/ui/Button";
-import axios from "axios";
 import { useEffect } from "react";
 import { handleUpload } from "../../Utils/Appwrite";
 import Card from "../../Components/Card";
-
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OTEzNTQxZjQyNThlN2EyNmZhZjI5NzQiLCJyb2xlIjoidXNlciIsImlhdCI6MTc2Mjk1NjQ2NX0.4JWD8Lg8zz-Wf5PJc-ufvNpkUdERtmHjiJyHmtemTQk";
+import { useAuth } from "../../Context/AuthContext";
+import { useGet, usePost } from "../../hooks/apiRequests";
+import { categorySchema } from "../../Utils/ZodForm";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
+import CategoryForm from "../../Components/Forms/CategoryForm";
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [data, setData] = useState({
-    name: "",
-    image: "",
-  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setValue,
+    reset,
+  } = useForm({ resolver: zodResolver(categorySchema) });
+
+  const { user } = useAuth();
+  const url = `/category`;
 
   const fetchCategories = async () => {
     setIsLoading(true);
-    if (!token) return;
+    if (!user?.token) return;
 
-    const response = await axios.get(
-      "http://localhost:3000/api/v1/category/",
-
-      {
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      }
-    );
-
-    setCategories(response.data.data);
+    const response = await useGet(url, user?.token);
+    setCategories(response.data);
+    console.log(response.data);
     setIsLoading(false);
   };
 
   useEffect(() => {
     fetchCategories();
-  }, [token]);
+  }, [user?.token]);
 
-  const addCategory = async (e) => {
-    setIsSubmitting(true)
-    e.preventDefault();
-    if (!token) return;
+  const myFunc = async (data) => {
+    if (!user?.token) return;
 
-    console.log(data)
-    const response = await axios.post(
-      "http://localhost:3000/api/v1/category",
-      data,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          token:token,
-        },
-      }
-    );
-
-    console.log(response.data);
-    setCategories((prev) => [...prev, response.data.data]);
-    setIsSubmitting(false)
-  };
-
-  const handleChange = (e) => {
-    console.log(e.target.name , e.target.value)
-    setData((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
+    const response = await usePost(url, user?.token, data);
+    if (response.success) {
+      toast.success(response.message);
+      setCategories((prev) => [...prev, response.data]);
+      reset();
+    } else {
+      toast.error(response.message);
+    }
   };
 
   const handleImageChange = async (e) => {
     const image = await handleUpload(e.target.files[0]);
-    setData((prev) => {
-      return { ...prev, image: image };
-    });
+    toast.success("image uploaded successfully");
+    setValue("image", image);
   };
 
   return isLoading ? (
     "Loading..."
   ) : (
     <>
-      <NavBar />
       <div id="container">
         <h1 id="heading">categories</h1>
         <div id="form-holder">
-          <form onSubmit={addCategory}>
-          <input
-            type="text"
-            placeholder="Enter category name"
-            name="name"
-            value={data?.name}
-            onChange={handleChange}
-          />
-          <input type="file" name="image" id="" onChange={handleImageChange} />
-          <Button
-            type="main"
-            buttonName="add category"
+          <CategoryForm
+            handleSubmit={handleSubmit}
+            myFunc={myFunc}
+            errors={errors}
             isSubmitting={isSubmitting}
+            register={register}
+            handleImageChange={handleImageChange}
           />
-        </form>
         </div>
 
         <div id="card-holder">
           {categories.length === 0
             ? "No Categories yet"
             : categories.map((category) => (
-                <Card heading={category.name} img={category.image}>
+                <Card
+                  heading={category.name}
+                  img={category.image}
+                  key={category?._id}
+                >
                   <div className="btn-holder">
                     <button>edit</button>
                     <button>deactivate</button>

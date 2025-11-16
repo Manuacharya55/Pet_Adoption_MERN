@@ -1,39 +1,33 @@
 import { useFetcher, useNavigate, useParams } from "react-router-dom";
-import NavBar from "../../Components/NavBar";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import Footer from "../../Components/Footer";
-
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OTEzNTQxZjQyNThlN2EyNmZhZjI5NzQiLCJyb2xlIjoidXNlciIsImlhdCI6MTc2Mjk1NjQ2NX0.4JWD8Lg8zz-Wf5PJc-ufvNpkUdERtmHjiJyHmtemTQk";
+import { useAuth } from "../../Context/AuthContext";
+import { useGet } from "../../hooks/apiRequests";
 
 const PetDescription = () => {
-  const [isLoading,setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const [pet, setPet] = useState();
-const navigate = useNavigate()
+  const navigate = useNavigate();
+  const url = `/pet/${id}`
+  const {user} = useAuth();
+
   const fetchPets = async () => {
     setIsLoading(true);
-    if (!token) return;
-    const response = await axios.get(`http://localhost:3000/api/v1/pet/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        token: token,
-      },
-    });
-    console.log(response.data.data);
-    setPet(response.data.data);
-    // setPets(response.data.data);
-    setIsLoading(false)
+    if (!user?.token) return;
+    const response = await useGet(url,user?.token)
+    setPet(response.data);
+    setIsLoading(false);
   };
 
   useEffect(() => {
     fetchPets();
-  }, [token]);
-  return isLoading ? "Loading..." : (
+  }, [user?.token]);
+  return isLoading ? (
+    "Loading..."
+  ) : (
     <>
-      <NavBar />
       <div id="container">
         <div id="navigation">
           <button onClick={() => navigate(-1)}>back</button>
@@ -88,9 +82,10 @@ const navigate = useNavigate()
             <h1>{pet?.shop?.shopname}</h1>
             <span>{pet?.shop?.address.phonenumber}</span>
             <span>{pet?.shop?.user.email}</span>
-            <button onClick={()=>navigate(`/shops/${pet?.shop._id}`)}>view details</button>
+            <button onClick={() => navigate(`/shops/${pet?.shop._id}`)}>
+              view details
+            </button>
           </div>
-
 
           <div id="shop-map">
             <MapContainer
@@ -103,15 +98,15 @@ const navigate = useNavigate()
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              <Marker position={[pet?.shop?.address.lat, pet?.shop?.address.lng]}>
+              <Marker
+                position={[pet?.shop?.address.lat, pet?.shop?.address.lng]}
+              >
                 <Popup>You are here</Popup>
               </Marker>
             </MapContainer>
           </div>
         </div>
       </div>
-
-      <Footer/>
     </>
   );
 };

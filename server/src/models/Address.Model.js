@@ -34,7 +34,7 @@ const addressSchema = new Schema({
         type:Number,
         required:true
     }
-})
+},{timestamps:true})
 
 const Address = model("Address",addressSchema);
 export default Address;

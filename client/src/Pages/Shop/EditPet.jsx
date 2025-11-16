@@ -5,121 +5,92 @@ import { pet } from "../../Utils/Form";
 import PetForm from "../../Components/Forms/PetForm";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { useGet, usePatch } from "../../hooks/apiRequests";
+import { useAuth } from "../../Context/AuthContext";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { petSchema } from "../../Utils/ZodForm";
+import toast from "react-hot-toast";
 
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OTEzNTQxZjQyNThlN2EyNmZhZjI5NzQiLCJyb2xlIjoidXNlciIsImlhdCI6MTc2Mjk1NjQ2NX0.4JWD8Lg8zz-Wf5PJc-ufvNpkUdERtmHjiJyHmtemTQk";
 
 const EditPet = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
-
+  const { user } = useAuth();
   const { id } = useParams();
-  const [data, setData] = useState({
-    name: "",
-    description: "",
-    image: "",
-    age: "",
-    breed: "",
-    price: "",
-    gender: "",
-    category: "",
-  });
+  const url = `/pet/${id}`;
+  const category_url = `/category/`;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setValue,
+  } = useForm({ resolver: zodResolver(petSchema) });
+
 
   const fetchPet = async () => {
     setIsLoading(true);
-    if (!token) return;
+    if (!user?.token) return;
 
-    const response = await axios.get(
-      `http://localhost:3000/api/v1/pet/${id}`,
+    const response = await useGet(url, user?.token);
+    const details = response.data;
 
-      {
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      }
-    );
-    console.log(response);
-    const details = response.data.data;
-    setData({
-      name: details?.name,
-      description: details?.description,
-      image: details?.image,
-      age: details?.age,
-      breed: details?.breed,
-      price: details?.price,
-      gender: details?.gender,
-      category: details?.category,
+  
+    Object.entries(details || {}).forEach(([key, value]) => {
+      setValue(key, value);
     });
+
     setIsLoading(false);
   };
 
   const fetchCategories = async () => {
-    if (!token) return;
+    if (!user?.token) return;
 
-    const response = await axios.get(
-      "http://localhost:3000/api/v1/category/",
-
-      {
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      }
-    );
+    const response = await useGet(category_url,user?.token)
     console.log(response);
-    setCategories(response.data.data);
+    setCategories(response.data);
     setIsLoading(false);
   };
 
   useEffect(() => {
     fetchPet();
     fetchCategories();
-  }, [token]);
+  }, [user?.token]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    console.log("hiii");
-    if (!token) {
-      console.log("hhihi")
+  const myFunc = async (data) => {
+    if (!user?.token) {
       return;
     }
 
-    console.log("heyyy")
-    const response = await axios.patch(
-      `http://localhost:3000/api/v1/pet/${id}`,
-      data,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      }
-    );
-    console.log(response.data.data);
-    navigate("/shopkeeper/pets")
+    const response = await usePatch(url,user?.token,data)
+    if(response.success){
+      toast.success(response.message)
+      navigate("/shopkeeper/pets");
+    }else{
+      toast.error(response.message)
+    }
   };
 
   return isLoading ? (
     "loading..."
   ) : (
     <>
-      <NavBar />
       <div id="container">
         <div id="navigation">
-          <button onClick={()=> navigate(-1)}>back</button>
+          <button onClick={() => navigate(-1)}>back</button>
         </div>
         <div id="form-holder">
           <PetForm
-            isSubmitting={isSubmitting}
-            categories={categories}
-            buttonName="update pet"
-            data={data}
-            setData={setData}
             handleSubmit={handleSubmit}
+            myFunc={myFunc}
+            errors={errors}
+            isSubmitting={isSubmitting}
+            register={register}
+            setValue={setValue}
+            categories={categories}
+            buttonName="edit pet"
           />
         </div>
       </div>

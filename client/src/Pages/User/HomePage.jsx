@@ -7,7 +7,6 @@ import Footer from "../../Components/Footer";
 const HomePage = () => {
   return (
     <>
-      <NavBar></NavBar>
       <div id="container">
         <div id="banner-image">
           <img src={"home-page.jpg"} alt="" />
@@ -34,7 +33,6 @@ const HomePage = () => {
         </div>
 
       </div>
-      <Footer/>
     </>
   );
 };

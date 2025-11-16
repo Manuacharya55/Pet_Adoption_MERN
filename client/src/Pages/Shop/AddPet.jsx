@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import NavBar from "../../Components/NavBar";
-import Form from "../../Components/Form";
-import { pet } from "../../Utils/Form";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { petSchema } from "../../Utils/ZodForm";
@@ -11,7 +8,6 @@ import { useGet, usePost } from "../../hooks/apiRequests";
 import { useAuth } from "../../Context/AuthContext";
 import toast from "react-hot-toast";
 import PetForm from "../../Components/Forms/PetForm";
-
 
 const AddPet = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -56,7 +52,6 @@ const AddPet = () => {
     "Loading..."
   ) : (
     <>
-      <NavBar />
       <div id="container">
         <div id="navigation">
           <button onClick={() => navigate(-1)}>back</button>

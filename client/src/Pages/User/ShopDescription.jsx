@@ -1,53 +1,45 @@
 import React from "react";
 import { useState } from "react";
-import NavBar from "../../Components/NavBar";
 import axios from "axios";
 import { useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import Card from "../../Components/Card";
+import { useAuth } from "../../Context/AuthContext";
+import { useGet } from "../../hooks/apiRequests";
 
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OTEzNTQxZjQyNThlN2EyNmZhZjI5NzQiLCJyb2xlIjoidXNlciIsImlhdCI6MTc2Mjk1NjQ2NX0.4JWD8Lg8zz-Wf5PJc-ufvNpkUdERtmHjiJyHmtemTQk";
 
 const ShopDescription = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState({});
   const [page, setPage] = useState(1);
   const [params,setParams] = useSearchParams();
-
+  const {user} = useAuth();
   const navigate = useNavigate();
 
   const { id } = useParams();
+  const url = `/shop/${id}?page=${page}`
+
   const fetchData = async () => {
     setIsLoading(true);
-    if (!token) return;
+    if (!user?.token) return;
 
-    const response = await axios.get(
-      `http://localhost:3000/api/v1/shop/${id}?page=${page}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      }
-    );
-
-    console.log(response.data.data);
-    setData(response.data.data);
+    const response = await useGet(url,user?.token,user?.token)
+    setData(response.data);
     setIsLoading(false);
   };
 
   useEffect(() => {
-    fetchData();
+    if(user?.token){
+      fetchData();
     setParams({page:page})
-  }, [token, page]);
+    }
+  }, [user?.token, page]);
   
   return isLoading ? (
     "Laoding..."
   ) : (
     <>
-      <NavBar />
       <div id="container">
          <div id="navigation">
           <button onClick={() => navigate(-1)}>back</button>

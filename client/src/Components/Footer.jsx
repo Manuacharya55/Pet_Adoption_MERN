@@ -1,5 +1,5 @@
 import React from "react";
-import { userNavbar } from "../Utils/Form";
+
 import { NavLink } from "react-router-dom";
 
 const Footer = ({ array }) => {
@@ -8,7 +8,7 @@ const Footer = ({ array }) => {
         <div id="footer-header">
           <h1 id="logo">The Happy paws</h1>
           <ul>
-            {userNavbar.map((route,idx) => (
+            {array.map((route,idx) => (
               <li key={idx}>
                 <NavLink to={route.route}>{route.name}</NavLink>
               </li>
@@ -16,7 +16,8 @@ const Footer = ({ array }) => {
           </ul>
         </div>
         <div id="footer-bottom">
-          <span>Copyrights 2025 The Happy Paws . All Rights Reserved.</span>
+          <span>© 2025 The Happy Paws .
+          All Rights Reserved.</span>
         </div>
       </footer>
   );

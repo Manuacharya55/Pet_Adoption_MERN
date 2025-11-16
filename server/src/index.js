@@ -26,6 +26,7 @@ import shopRouter from "./router/Shop.router.js"
 import categoryRouter from "./router/Category.router.js"
 import petRouter from "./router/Pets.router.js"
 import adminRouter from "./router/Admin.router.js"
+import dashboardRouter from "./router/Dashboard.router.js"
 
 import { GlobalErrorHandler } from "./utils/GlobalError.js";
 
@@ -35,6 +36,7 @@ app.use("/api/v1/shop",shopRouter);
 app.use("/api/v1/category",categoryRouter);
 app.use("/api/v1/pet",petRouter);
 app.use("/api/v1/admin",adminRouter);
+app.use("/api/v1/dashboard",dashboardRouter);
 
 
 app.use(GlobalErrorHandler)

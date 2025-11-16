@@ -4,44 +4,36 @@ import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { useAuth } from "../../Context/AuthContext";
+import { useGet } from "../../hooks/apiRequests";
 
 const Pets = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [pets, setPets] = useState();
   const [params, setParams] = useSearchParams();
-  const token = "";
-
-  const {value} = useAuth()
+  const { user } = useAuth();
+  const url = `/admin/pets?page=${page}`;
 
   const fetchPets = async () => {
-    console.log(value)
     setIsLoading(true);
-    const response = await axios.get(
-      `http://localhost:3000/api/v1/admin/pets?page=${page}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      }
-    );
-
-    console.log(response.data);
-    setPets(response.data.data);
+    if (!user?.token) return;
+    const response = await useGet(url, user?.token);
+    setPets(response.data);
+    console.log(response.data)
     setIsLoading(false);
   };
 
   useEffect(() => {
-    fetchPets();
-    setParams({ page: page });
-  }, [page, token]);
+    if (user?.token) {
+      setParams({ page: page });
+      fetchPets();
+    }
+  }, [page, user?.token]);
 
   return isLoading ? (
     "Loading..."
   ) : (
     <>
-      <NavBar />
       <div id="container">
         <h1 id="heading">All Pets</h1>
 
@@ -76,16 +68,18 @@ const Pets = () => {
               </tr>
             </thead>
             <tbody>
-              {pets.pets.length == 0
+              {pets.length == 0
                 ? "No pets yet"
                 : pets.pets.map((curele) => (
-                    <tr>
+                    <tr key={curele?._id}>
                       <td>{curele?.name}</td>
                       <td>{curele?.gender}</td>
                       <td>{curele?.age}</td>
                       <td>{curele?.price} rs</td>
                       <td>{curele?.category?.name}</td>
-                      <td><button>view details</button></td>
+                      <td>
+                        <button>view details</button>
+                      </td>
                     </tr>
                   ))}
             </tbody>

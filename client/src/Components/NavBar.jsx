@@ -3,9 +3,9 @@ import { NavLink } from "react-router-dom";
 import { LuCircleUserRound } from "react-icons/lu";
 import { IoCloseSharp } from "react-icons/io5";
 import { TbMenu2 } from "react-icons/tb";
-import { adminNavbar, shopkeeperNavbar, userNavbar } from "../Utils/Form";
 
-const NavBar = () => {
+
+const NavBar = ({array}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -14,7 +14,7 @@ const NavBar = () => {
         <h1 id="logo">The Happy Paws</h1>
 
         <ul>
-          {shopkeeperNavbar.map((route,idx) => (
+          {array?.map((route,idx) => (
             <li className="hideonmobile" key={idx}>
               <NavLink to={route.route}>{route.name}</NavLink>
             </li>
@@ -35,7 +35,7 @@ const NavBar = () => {
 
         {/* Mobile Menu */}
         <ul id="menu" className={isOpen ? "open" : ""}>
-          {userNavbar.map((route,idx) => (
+          {array.map((route,idx) => (
             <li key={idx}>
               <NavLink to={route.route}>{route.name}</NavLink>
             </li>

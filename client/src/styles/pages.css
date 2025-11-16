@@ -139,7 +139,7 @@
   font-size: 5rem;
   display: block;
   font-weight: 600;
-  /* line-height: 30px; */
+ text-transform: capitalize;
 }
 
 #pet-name {
@@ -215,4 +215,73 @@
     border-radius: 10px;
     border-radius: 10px;
     overflow: hidden;
+}
+
+
+/* dashboard */
+#tile-holder{
+  margin-top: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+#tables-holder{
+  margin-top: 30px;
+  width: 100%;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+@media(max-width:800px){
+  #tables-holder{
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media(max-width:650px){
+  #tables-holder{
+    grid-template-columns: 1fr;
+  }
+
+  #pet-detail{
+    border-radius: 8px;
+    padding: 20px 10px;
+    margin-top: 30px;
+    border: 1px solid var(--primary-color);
+  }
+   #pet-description-card,#shop-description-card{
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+   }
+
+   #pet-name,#pet-price{
+    font-size: 3.5rem;
+    text-align: center;
+   }  
+
+   #pet-description,#category{
+    text-align: center;
+   }
+
+   #shop-map{
+    height: 350px;
+   }
+
+   #pet-attributes-card{
+    gap: 20px;
+   }
+
+   .attributes{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+   }
 }

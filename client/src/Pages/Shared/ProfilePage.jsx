@@ -20,7 +20,7 @@ const ProfilePage = () => {
     if (!user?.token) return;
 
     const response = await useGet(url, user?.token);
-
+    console.log(response)
     if (response.success) {
       setData(response?.data);
     } else {
@@ -37,7 +37,6 @@ const ProfilePage = () => {
     "...Loading"
   ) : (
     <>
-      <NavBar />
       <div id="container">
         <h1 id="heading">Your Profile</h1>
 
@@ -58,7 +57,7 @@ const ProfilePage = () => {
           >
             edit address
           </button>
-          {!data?.shopkeeper && <button
+          {data?.role === "user" && <button
             onClick={() => {
               navigate("/become-shopkeeper");
             }}
@@ -67,7 +66,6 @@ const ProfilePage = () => {
           </button>}
         </div>
       </div>
-      <Footer />
     </>
   );
 };

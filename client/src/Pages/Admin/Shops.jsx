@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../../Components/NavBar";
-import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { useAuth } from "../../Context/AuthContext";
@@ -10,37 +9,28 @@ const Shops = () => {
   const [page, setPage] = useState(1);
   const [pets, setPets] = useState();
   const [params, setParams] = useSearchParams();
-  const token = "";
+  const { user } = useAuth();
+  const url = `/admin/shops?page=${page}`;
 
-  const {user} = useAuth();
   const fetchPets = async () => {
-    console.log(user)
     setIsLoading(true);
-    const response = await axios.get(
-      `http://localhost:3000/api/v1/admin/shops?page=${page}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      }
-    );
-
-    console.log(response.data);
-    setPets(response.data.data);
+    if (!user?.token) return;
+    const response = await useGet(url, user?.token);
+    setPets(response.data);
     setIsLoading(false);
   };
 
   useEffect(() => {
-    fetchPets();
-    setParams({ page: page });
-  }, [page, token]);
+    if (user?.token) {
+      fetchPets();
+      setParams({ page: page });
+    }
+  }, [page, user?.token]);
 
   return isLoading ? (
     "Loading..."
   ) : (
     <>
-      <NavBar />
       <div id="container">
         <h1 id="heading">All Shops</h1>
 
@@ -71,7 +61,7 @@ const Shops = () => {
                 <th>state</th>
                 <th>country</th>
                 <th>total pets</th>
-              
+
                 <th>view details</th>
               </tr>
             </thead>
@@ -85,7 +75,7 @@ const Shops = () => {
                       <td>{curele?.address?.state}</td>
                       <td>{curele?.address?.country}</td>
                       <td>{curele?.pet?.length || 0}</td>
-                      
+
                       <td>
                         <button>view details</button>
                       </td>

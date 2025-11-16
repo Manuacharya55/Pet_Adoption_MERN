@@ -6,7 +6,6 @@ import Card from '../../Components/Card'
 const Wishlist = () => {
   return (
     <>
-    <NavBar />
     <div id="container">
         <h1 id="heading">
             Your Wishlist
@@ -56,7 +55,6 @@ const Wishlist = () => {
             </Card>
         </div>
     </div>
-    <Footer/>
 
     </>
   )

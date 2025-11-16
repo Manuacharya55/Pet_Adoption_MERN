@@ -52,11 +52,8 @@ nav ul a:hover {
   color: var(--primary-color);
 }
 
-nav ul a.active{
-  /* background-color: var(--primary-color);
-  padding: 8px 15px;
-  border-radius: 8px; */
-  color: var(--primary-color)
+nav ul a.active {
+  color: var(--primary-color);
 }
 .hamburger {
   display: none;
@@ -106,7 +103,10 @@ nav ul a.active{
 }
 
 .tile .text {
-  color: lightgrey;
+  color: rgb(235, 233, 233);
+  font-size: 1.3rem;
+  text-transform: capitalize;
+  text-align: center;
 }
 
 /* footer */
@@ -136,6 +136,7 @@ footer ul a {
   text-decoration: none;
   color: white;
 }
+
 #footer-bottom {
   padding: 20px;
   text-align: center;
@@ -216,18 +217,13 @@ select {
   border: 1px solid lightgrey;
 }
 
-
-
-
-
 /* table style */
 
-#table-holder{
+#table-holder {
   width: 100%;
-  
 }
 
-#table-option{
+#table-option {
   width: 100%;
   padding: 20px;
   border: 1px solid var(--primary-color);
@@ -239,7 +235,7 @@ select {
   gap: 30px;
 }
 
-#table-option button{
+#table-option button {
   width: fit-content;
   display: flex;
   align-items: center;
@@ -247,7 +243,7 @@ select {
   font-size: 1.4rem;
 }
 
-table{
+table {
   width: 100%;
   border: 1px solid;
   border-collapse: collapse;
@@ -255,32 +251,38 @@ table{
   overflow: hidden;
 }
 
-table thead{
+table thead {
   background-color: var(--primary-color);
   color: white;
 }
 
-table tr{
+table tr {
   border: 1px solid;
 }
 
-table td{
-    padding: 8px;
+table td {
+  padding: 8px;
 }
 
-table th{
-    padding: 10px;
-    text-align: left;
-    text-transform: capitalize;
+table th {
+  padding: 10px;
+  text-align: left;
+  text-transform: capitalize;
 }
 
-table button{
+table button {
   width: fit-content;
 }
-
+table img {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
 @media (max-width: 850px) {
   nav {
     padding: 20px;
+    width: 100%;
   }
   .hideonmobile {
     display: none;
@@ -294,46 +296,65 @@ table button{
     display: flex;
   }
 
+  #menu li {
+    width: 100%;
+  }
+
   nav ul a {
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    display: block;
     text-decoration: none;
     color: white;
+  }
+
+  nav ul a.active {
+    color: var(--primary-color);
+    background-color: white;
   }
 
   .error {
     font-size: 10px;
   }
+
+  #footer-bottom span{
+    font-size: 1rem;
+  }
 }
 
-@media(max-width:650px){
-  #table-option{
-  justify-content: center;
-  position: sticky;
-  top: 10px;
-  background-color: transparent;
-  backdrop-filter: blur(30px);
-}
+@media (max-width: 650px) {
+  #table-option {
+    justify-content: center;
+    position: sticky;
+    top: 10px;
+    background-color: transparent;
+    backdrop-filter: blur(30px);
+  }
 
-  table{
+  table {
     overflow: visible;
     /* border-collapse: separate; */
     border: none;
   }
 
-  table thead{
+  table thead {
     display: none;
   }
 
-  table tbody{
+  table tbody {
     display: flex;
     flex-direction: column;
     gap: 15px;
-
   }
-  table tr{
-    border: 1px solid;
+  table tr {
+    border: 1px solid var(--primary-color);
     border-radius: 8px;
   }
-  table td,table th{
+  table td,
+  table th {
     display: block;
     width: 100%;
   }

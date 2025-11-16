@@ -25,10 +25,10 @@ export const createUser = AsyncHandler(async (req, res) => {
   const token = await user.generateToken();
 
   const data = {
-    token : token,
-    role : user.role,
-    email : user.email
-  }
+    token: token,
+    role: user.role,
+    email: user.email,
+  };
 
   res.status(201).json(new ApiSuccess(201, data, "User Created Successfully"));
 });
@@ -72,4 +72,22 @@ export const userProfile = AsyncHandler(async (req, res) => {
   res
     .status(200)
     .json(new ApiSuccess(200, existingUser, "Profile fetched successfully"));
+});
+
+export const updateProfile = AsyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const { email, fullname, avatar } = req.body;
+  const existingUser = await User.findByIdAndUpdate(
+    _id,
+    { $set: { fullname, email, avatar } },
+    { new: true }
+  );
+
+  if (!existingUser) {
+    throw new ApiError(401, "User not found");
+  }
+  console.log(existingUser);
+  res
+    .status(201)
+    .json(new ApiSuccess(201, existingUser, "Profile updated successfully"));
 });

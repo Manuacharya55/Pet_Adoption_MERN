@@ -3,13 +3,12 @@ import Register from "./Pages/Auth/Register";
 import Login from "./Pages/Auth/Login";
 import Address from "./Pages/Shared/Address";
 import HomePage from "./Pages/User/HomePage";
-import Footer from "./Components/Footer";
 import PetsPage from "./Pages/User/PetsPage";
 import ShopsPage from "./Pages/User/ShopsPage";
 import Wishlist from "./Pages/User/Wishlist";
 import ProfilePage from "./Pages/Shared/ProfilePage";
 import Pets from "./Pages/Shop/Pets";
-import AllPets from "./Pages/Admin/Pets"
+import AllPets from "./Pages/Admin/Pets";
 import AddPet from "./Pages/Shop/AddPet";
 import EditPet from "./Pages/Shop/EditPet";
 import EditProfile from "./Pages/Shared/EditProfile";
@@ -23,6 +22,9 @@ import Dashboard from "./Pages/Shop/Dashboard";
 import Requests from "./Pages/Shop/Requests";
 import ShopDescription from "./Pages/User/ShopDescription";
 import PetDescription from "./Pages/User/PetDescription";
+import UserLayout from "./Layouts/UserLayout";
+import ShopKeeperLayout from "./Layouts/ShopKeeperLayout";
+import AdminLayout from "./Layouts/AdminLayout";
 
 function App() {
   return (
@@ -32,34 +34,38 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/pets" element={<PetsPage />} />
-        <Route path="/pets/:id" element={<PetDescription />} />
-        <Route path="/shops" element={<ShopsPage />} />
-        <Route path="/shops/:id" element={<ShopDescription />} />
-        <Route path="/wishlist" element={<Wishlist />} />
+        <Route element={<UserLayout/>}>
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/pets" element={<PetsPage />} />
+          <Route path="/pets/:id" element={<PetDescription />} />
+          <Route path="/shops" element={<ShopsPage />} />
+          <Route path="/shops/:id" element={<ShopDescription />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/become-shopkeeper" element={<BecomeShopKeeper />} />
+        </Route>
 
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/profile/:id" element={<EditProfile />} />
-
         <Route path="/add-address" element={<Address />} />
-        <Route path="/become-shopkeeper" element={<BecomeShopKeeper />} />
         <Route path="/address/:id" element={<EditAddress />} />
 
-{/* shopkeeper routes */}
-        <Route path="/shopkeeper/dashboard" element={<Dashboard />} />
+        {/* shopkeeper routes */}
+        <Route element={<ShopKeeperLayout/>}>
+          <Route path="/shopkeeper/dashboard" element={<Dashboard />} />
         <Route path="/shopkeeper/pets" element={<Pets />} />
         <Route path="/shopkeeper/request" element={<Requests />} />
         <Route path="/shopkeeper/addpet" element={<AddPet />} />
         <Route path="/shopkeeper/editpet/:id" element={<EditPet />} />
-
+        </Route>
 
         {/* admin routes */}
-        <Route path="/admin/dashboard" element={<DashBoard />} />
+        <Route element={<AdminLayout/>}>
+          <Route path="/admin/dashboard" element={<DashBoard />} />
         <Route path="/admin/categories" element={<Categories />} />
         <Route path="/admin/users" element={<Users />} />
         <Route path="/admin/pets" element={<AllPets />} />
         <Route path="/admin/shops" element={<Shops />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

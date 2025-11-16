@@ -1,46 +1,39 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../../Components/NavBar";
-import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { useAuth } from "../../Context/AuthContext";
+import {useGet} from "../../hooks/apiRequests"
 
 const Users = () => {
- const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [pets, setPets] = useState();
   const [params, setParams] = useSearchParams();
-  const token = "";
+  const { user } = useAuth();
+  const url = `/admin/users?page=${page}`;
 
   const fetchPets = async () => {
     setIsLoading(true);
-    const response = await axios.get(
-      `http://localhost:3000/api/v1/admin/users?page=${page}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      }
-    );
-
-    console.log(response.data);
-    setPets(response.data.data);
+    if (!user?.token) return;
+    const response = await useGet(url,user?.token)
+    setPets(response.data);
     setIsLoading(false);
   };
 
   useEffect(() => {
-    fetchPets();
-    setParams({ page: page });
-  }, [page, token]);
+    if (user?.token) {
+      fetchPets();
+      setParams({ page: page });
+    }
+  }, [page, user?.token]);
 
   return isLoading ? (
     "Loading..."
   ) : (
     <>
-      <NavBar />
       <div id="container">
-        <h1 id="heading">All Shops</h1>
+        <h1 id="heading">All Users</h1>
 
         <div id="table-holder">
           <div id="table-option">
@@ -93,6 +86,6 @@ const Users = () => {
       </div>
     </>
   );
-}
+};
 
-export default Users
+export default Users;
