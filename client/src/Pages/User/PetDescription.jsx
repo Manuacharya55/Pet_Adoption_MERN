@@ -3,20 +3,21 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { useAuth } from "../../Context/AuthContext";
-import { useGet } from "../../hooks/apiRequests";
+import { useGet, usePost } from "../../hooks/apiRequests";
+import toast from "react-hot-toast";
 
 const PetDescription = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const [pet, setPet] = useState();
   const navigate = useNavigate();
-  const url = `/pet/${id}`
-  const {user} = useAuth();
+  const url = `/pet/${id}`;
+  const { user } = useAuth();
 
   const fetchPets = async () => {
     setIsLoading(true);
     if (!user?.token) return;
-    const response = await useGet(url,user?.token)
+    const response = await useGet(url, user?.token);
     setPet(response.data);
     setIsLoading(false);
   };
@@ -24,6 +25,21 @@ const PetDescription = () => {
   useEffect(() => {
     fetchPets();
   }, [user?.token]);
+
+  const handleWishlist = async (id) => {
+    if (!user?.token) return;
+
+    const response = await usePost(`/auth/wishlist/${id}`, user?.token, {});
+
+    console.log(response)
+    if (response.success) {
+      toast.success(response.message);
+    } else {
+      toast.error(response.message);
+    }
+  };
+
+
   return isLoading ? (
     "Loading..."
   ) : (
@@ -49,7 +65,10 @@ const PetDescription = () => {
             <div id="detail-footer">
               <p id="category">category : {pet?.category.name}</p>
               <span id="pet-price">{pet?.price}₹</span>
-              <button>adopt</button>
+              <div className="btn-holder">
+                <button onClick={()=> handleWishlist(id)}>add to wishlist</button>
+                <button>adopt</button>
+              </div>
             </div>
           </div>
         </div>

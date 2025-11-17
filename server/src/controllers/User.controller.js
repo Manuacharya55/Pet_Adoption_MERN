@@ -2,6 +2,8 @@ import { AsyncHandler } from "../utils/AsyncHandler.js";
 import { ApiError } from "../utils/AppError.js";
 import { ApiSuccess } from "../utils/AppSuccess.js";
 import User from "../models/User.Model.js";
+import Pets from "../models/Pets.Model.js";
+import Wishlist from "../models/Wishlist.Model.js";
 
 export const createUser = AsyncHandler(async (req, res) => {
   const { fullname, email, password } = req.body;
@@ -90,4 +92,66 @@ export const updateProfile = AsyncHandler(async (req, res) => {
   res
     .status(201)
     .json(new ApiSuccess(201, existingUser, "Profile updated successfully"));
+});
+
+export const getWishlist = AsyncHandler(async (req, res) => {
+  const { _id } = req.user;
+
+  const wishlist = await Wishlist.find({ user: _id })
+  .populate([
+    {
+      path: "pet",
+      select:"name price image",
+      populate: {
+        path: "category",
+        select:"name"
+      }
+    }
+  ]);
+
+  res.status(200).json(new ApiSuccess(200, wishlist, "Fetched your wishlist"));
+});
+
+export const addTowishlist = AsyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const { petId } = req.params;
+
+  const existingPet = await Pets.findById(petId);
+
+  if (!existingPet) {
+    throw new ApiError(404, "No such pets");
+  }
+
+  const existingWishlist = await Wishlist.findOne({ user: _id, pet: petId });
+
+  if (existingWishlist) {
+    res.status(201).json(new ApiSuccess(201, "", "Pet added to wishlist"));
+  }
+  const wishlist = await Wishlist.create({
+    user: _id,
+    pet: petId,
+  });
+
+  res.status(201).json(new ApiSuccess(201, wishlist, "Pet added to wishlist"));
+});
+
+export const removeFromwishlist = AsyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const { petId } = req.params;
+
+  const existingPet = await Pets.findById(petId);
+
+  if (!existingPet) {
+    throw new ApiError(404, "No such pets");
+  }
+
+  const existingWishlist = await Wishlist.deleteOne({ user: _id, pet: petId });
+
+  if (!existingWishlist) {
+    throw new ApiError(401, "No Such Pets in Wishlist");
+  }
+
+  res
+    .status(201)
+    .json(new ApiSuccess(201, existingWishlist, "Pet removed from wishlist"));
 });

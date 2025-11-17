@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
-import NavBar from "../../Components/NavBar";
-import Select from "../../Components/ui/Select";
 import Card from "../../Components/Card";
-import Footer from "../../Components/Footer";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import axios from "axios";
-
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OTEzNTQxZjQyNThlN2EyNmZhZjI5NzQiLCJyb2xlIjoidXNlciIsImlhdCI6MTc2Mjk1NjQ2NX0.4JWD8Lg8zz-Wf5PJc-ufvNpkUdERtmHjiJyHmtemTQk";
+import { useAuth } from "../../Context/AuthContext";
+import { useGet, usePost } from "../../hooks/apiRequests";
+import { toast } from "react-hot-toast";
 
 const PetsPage = () => {
   const [params, setParams] = useSearchParams();
@@ -15,6 +11,8 @@ const PetsPage = () => {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const categoryUrl = `/category`;
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const [query, setQuery] = useState({
@@ -22,32 +20,21 @@ const PetsPage = () => {
     category: "all",
   });
 
+  const url = `/pet?gender=${query?.gender}&category=${query?.category}`;
+  
   const fetchPets = async () => {
-    setIsLoading(true)
-    if (!token) return;
-    const response = await axios.get(
-      `http://localhost:3000/api/v1/pet?gender=${query?.gender}&category=${query?.category}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      }
-    );
-    console.log(response.data.data)
-    setPets(response.data.data);
-    setIsLoading(false)
+    setIsLoading(true);
+    if (!user?.token) return;
+    const response = await useGet(url, user?.token);
+    console.log(response);
+    setPets(response.data);
+    setIsLoading(false);
   };
 
   const fetchCategory = async () => {
-    if (!token) return;
-    const response = await axios.get(`http://localhost:3000/api/v1/category/`, {
-      headers: {
-        "Content-Type": "application/json",
-        token: token,
-      },
-    });
-    setCategories(response.data.data);
+    if (!user?.token) return;
+    const response = await useGet(categoryUrl, user?.token);
+    setCategories(response.data);
   };
 
   const fetchAll = async () => {
@@ -60,18 +47,30 @@ const PetsPage = () => {
     setQuery((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
-    console.log("call")
+    console.log("call");
   };
 
   useEffect(() => {
     fetchAll();
-  }, [token]);
+  }, [user?.token]);
 
   useEffect(() => {
     setParams(query);
     fetchPets();
   }, [query]);
 
+  const handleWishlist = async (id) => {
+    if (!user?.token) return;
+
+    const response = await usePost(`/auth/wishlist/${id}`, user?.token, {});
+
+    console.log(response)
+    if (response.success) {
+      toast.success(response.message);
+    } else {
+      toast.error(response.message);
+    }
+  };
   return (
     <>
       <div id="container">
@@ -95,9 +94,9 @@ const PetsPage = () => {
           "Loading..."
         ) : (
           <div id="card-holder">
-            {pets.pet.length === 0
+            {pets?.pet?.length === 0
               ? "No Pets Yet"
-              : pets?.pet.map((pet) => (
+              : pets?.pet?.map((pet) => (
                   <Card heading={pet.name} img={pet.image} key={pet._id}>
                     <div className="price-holder">
                       <span className="pet-category">
@@ -106,7 +105,9 @@ const PetsPage = () => {
                       <span className="price">{pet?.price}₹</span>
                     </div>
                     <div className="btn-holder">
-                      <button>add to wishlist</button>
+                      <button onClick={() => handleWishlist(pet?._id)}>
+                        add to wishlist
+                      </button>
                       <button onClick={() => navigate(`/pets/${pet._id}`)}>
                         more details
                       </button>
