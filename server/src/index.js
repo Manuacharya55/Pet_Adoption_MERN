@@ -27,6 +27,7 @@ import categoryRouter from "./router/Category.router.js"
 import petRouter from "./router/Pets.router.js"
 import adminRouter from "./router/Admin.router.js"
 import dashboardRouter from "./router/Dashboard.router.js"
+import adoptionRouter from "./router/Adoption.router.js"
 
 import { GlobalErrorHandler } from "./utils/GlobalError.js";
 
@@ -37,6 +38,7 @@ app.use("/api/v1/category",categoryRouter);
 app.use("/api/v1/pet",petRouter);
 app.use("/api/v1/admin",adminRouter);
 app.use("/api/v1/dashboard",dashboardRouter);
+app.use("/api/v1/adoption",adoptionRouter);
 
 
 app.use(GlobalErrorHandler)

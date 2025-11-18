@@ -4,6 +4,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import Button from "../../Components/ui/Button";
+import { usePost } from "../../hooks/apiRequests";
+import { useAuth } from "../../Context/AuthContext";
+import toast from "react-hot-toast";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email format"),
@@ -19,21 +22,17 @@ const Login = () => {
   } = useForm({ resolver: zodResolver(loginSchema) });
 
   const navigate = useNavigate();
-
+  const { setToken } = useAuth();
   const myFunc = async (data) => {
-    const response = await axios.post(
-      "http://localhost:3000/api/v1/auth/login",
-      data,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    console.log(response);
-    reset()
-    navigate("/homepage")
+    const response = await usePost("/auth/login", "", data);
+    if (response?.success) {
+      toast.success(response.message);
+      setToken(response.data);
+      navigate("/home");
+    } else {
+      toast.error(response.message);
+      reset();
+    }
   };
   return (
     <div className="auth">
@@ -43,10 +42,22 @@ const Login = () => {
       <div className="auth-form">
         <h1 id="title">Sign In</h1>
         <form onSubmit={handleSubmit(myFunc)}>
-          <input type="text" placeholder="enter your email" {...register("email")}/>
-          {errors?.email && <span className="error">{errors.email.message}</span>}
-          <input type="text" placeholder="enter your password" {...register("password")}/>
-          {errors?.password && <span className="error">{errors.password.message}</span>}
+          <input
+            type="text"
+            placeholder="enter your email"
+            {...register("email")}
+          />
+          {errors?.email && (
+            <span className="error">{errors.email.message}</span>
+          )}
+          <input
+            type="text"
+            placeholder="enter your password"
+            {...register("password")}
+          />
+          {errors?.password && (
+            <span className="error">{errors.password.message}</span>
+          )}
           <Button
             buttonName="sign in"
             type="main"

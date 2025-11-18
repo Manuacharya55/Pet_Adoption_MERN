@@ -31,7 +31,7 @@ const PetDescription = () => {
 
     const response = await usePost(`/auth/wishlist/${id}`, user?.token, {});
 
-    console.log(response)
+    console.log(response);
     if (response.success) {
       toast.success(response.message);
     } else {
@@ -39,7 +39,21 @@ const PetDescription = () => {
     }
   };
 
+  const handleAdoptionRequest = async (id) => {
+    if (!user?.token) return;
 
+    const data = {
+      shop: pet?.shop?._id,
+      pet: pet?._id,
+    };
+
+    const response = await usePost(`/adoption/`, user?.token, data);
+   if(response.success){
+    toast.success(response.message)
+   }else{
+    toast.error(response.message)
+   }
+  };
   return isLoading ? (
     "Loading..."
   ) : (
@@ -66,8 +80,10 @@ const PetDescription = () => {
               <p id="category">category : {pet?.category.name}</p>
               <span id="pet-price">{pet?.price}₹</span>
               <div className="btn-holder">
-                <button onClick={()=> handleWishlist(id)}>add to wishlist</button>
-                <button>adopt</button>
+                <button onClick={() => handleWishlist(id)}>
+                  add to wishlist
+                </button>
+                <button onClick={() => handleAdoptionRequest(id)}>adopt</button>
               </div>
             </div>
           </div>

@@ -25,6 +25,7 @@ import PetDescription from "./Pages/User/PetDescription";
 import UserLayout from "./Layouts/UserLayout";
 import ShopKeeperLayout from "./Layouts/ShopKeeperLayout";
 import AdminLayout from "./Layouts/AdminLayout";
+import AdoptionRequestDetails from "./Pages/Shop/AdoptionRequestDetails";
 
 function App() {
   return (
@@ -34,7 +35,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        <Route element={<UserLayout/>}>
+        <Route element={<UserLayout />}>
           <Route path="/home" element={<HomePage />} />
           <Route path="/pets" element={<PetsPage />} />
           <Route path="/pets/:id" element={<PetDescription />} />
@@ -50,21 +51,22 @@ function App() {
         <Route path="/address/:id" element={<EditAddress />} />
 
         {/* shopkeeper routes */}
-        <Route element={<ShopKeeperLayout/>}>
+        <Route element={<ShopKeeperLayout />}>
           <Route path="/shopkeeper/dashboard" element={<Dashboard />} />
-        <Route path="/shopkeeper/pets" element={<Pets />} />
-        <Route path="/shopkeeper/request" element={<Requests />} />
-        <Route path="/shopkeeper/addpet" element={<AddPet />} />
-        <Route path="/shopkeeper/editpet/:id" element={<EditPet />} />
+          <Route path="/shopkeeper/pets" element={<Pets />} />
+          <Route path="/shopkeeper/request" element={<Requests />} />
+          <Route path="/shopkeeper/request/:id" element={<AdoptionRequestDetails />} />
+          <Route path="/shopkeeper/addpet" element={<AddPet />} />
+          <Route path="/shopkeeper/editpet/:id" element={<EditPet />} />
         </Route>
 
         {/* admin routes */}
-        <Route element={<AdminLayout/>}>
+        <Route element={<AdminLayout />}>
           <Route path="/admin/dashboard" element={<DashBoard />} />
-        <Route path="/admin/categories" element={<Categories />} />
-        <Route path="/admin/users" element={<Users />} />
-        <Route path="/admin/pets" element={<AllPets />} />
-        <Route path="/admin/shops" element={<Shops />} />
+          <Route path="/admin/categories" element={<Categories />} />
+          <Route path="/admin/users" element={<Users />} />
+          <Route path="/admin/pets" element={<AllPets />} />
+          <Route path="/admin/shops" element={<Shops />} />
         </Route>
       </Routes>
     </BrowserRouter>
