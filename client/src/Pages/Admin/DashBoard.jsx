@@ -15,7 +15,6 @@ const DashBoard = () => {
     if (!user?.token) return;
 
     const response = await useGet(url, user?.token);
-    console.log(response.data);
     setData(response.data);
     setIsLoading(false);
   };

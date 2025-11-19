@@ -16,6 +16,9 @@ router
   .post(verifyJWT, addAdoption);
 
 router.get("/history", verifyJWT, getAdoptionRequestHistory);
-router.route("/:petId").get(verifyJWT,getSingleAdoptionRequest).patch(verifyJWT, updateRequests);
+router
+  .route("/:petId")
+  .get(verifyJWT, getSingleAdoptionRequest)
+  .patch(verifyJWT, updateRequests);
 
 export default router;

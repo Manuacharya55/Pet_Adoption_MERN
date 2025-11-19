@@ -1,5 +1,4 @@
 import { useState } from "react";
-import NavBar from "../../Components/NavBar";
 import { useEffect } from "react";
 import { handleUpload } from "../../Utils/Appwrite";
 import Card from "../../Components/Card";
@@ -32,7 +31,6 @@ const Categories = () => {
 
     const response = await useGet(url, user?.token);
     setCategories(response.data);
-    console.log(response.data);
     setIsLoading(false);
   };
 

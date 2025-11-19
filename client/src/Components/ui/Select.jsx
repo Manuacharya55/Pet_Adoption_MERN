@@ -4,7 +4,6 @@ const Select = () => {
     const [open,setOpen] = useState(false);
     const [option,setOption] = useState("please select an option");
     const handleClick = (e) =>{
-        console.log(e.target)
         setOption(e.target.toString())
         setOpen(false)
     }

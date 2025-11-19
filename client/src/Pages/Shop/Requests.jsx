@@ -18,7 +18,6 @@ const Requests = () => {
 
     const response = await useGet("/adoption/", user?.token);
     if (response?.success) {
-      console.log(response.data);
       setPets(response.data);
     } else {
       toast.error(response.message);

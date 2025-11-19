@@ -28,7 +28,6 @@ const AddPet = () => {
   const fetchCategories = async () => {
     if (!user?.token) return;
     const response = await useGet(url, user?.token);
-    console.log(response);
     setCategories(response.data);
     setIsLoading(false);
   };

@@ -25,14 +25,12 @@ const BecomeShopKeeper = () => {
 
   const handleImageChange = async (e) => {
     const response = await handleUpload(e.target.files[0]);
-    console.log(response);
     setValue("image", response);
   };
 
   const myFunc = async (data) => {
     if (!user?.token) return;
 
-    console.log(user?.token);
     const response = await usePost(url, user?.token, data);
     if (response.success) {
       toast.success(response.message);

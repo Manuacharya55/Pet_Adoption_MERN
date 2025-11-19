@@ -88,7 +88,7 @@ export const updateProfile = AsyncHandler(async (req, res) => {
   if (!existingUser) {
     throw new ApiError(401, "User not found");
   }
-  console.log(existingUser);
+
   res
     .status(201)
     .json(new ApiSuccess(201, existingUser, "Profile updated successfully"));

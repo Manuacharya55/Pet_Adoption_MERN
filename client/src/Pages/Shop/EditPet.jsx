@@ -49,7 +49,6 @@ const EditPet = () => {
     if (!user?.token) return;
 
     const response = await useGet(category_url,user?.token)
-    console.log(response);
     setCategories(response.data);
     setIsLoading(false);
   };

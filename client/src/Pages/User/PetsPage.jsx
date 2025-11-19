@@ -26,7 +26,6 @@ const PetsPage = () => {
     setIsLoading(true);
     if (!user?.token) return;
     const response = await useGet(url, user?.token);
-    console.log(response);
     setPets(response.data);
     setIsLoading(false);
   };
@@ -47,7 +46,6 @@ const PetsPage = () => {
     setQuery((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
-    console.log("call");
   };
 
   useEffect(() => {
@@ -64,7 +62,6 @@ const PetsPage = () => {
 
     const response = await usePost(`/auth/wishlist/${id}`, user?.token, {});
 
-    console.log(response)
     if (response.success) {
       toast.success(response.message);
     } else {

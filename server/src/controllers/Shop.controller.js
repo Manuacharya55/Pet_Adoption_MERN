@@ -9,7 +9,6 @@ export const addShop = AsyncHandler(async (req, res) => {
   const { image, shopname } = req.body;
   const { _id } = req.user;
 
-  console.log(image, shopname);
   if (!image || !shopname) {
     throw new ApiError(401, "Required fields are empty");
   }

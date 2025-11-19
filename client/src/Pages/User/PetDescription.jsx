@@ -31,7 +31,6 @@ const PetDescription = () => {
 
     const response = await usePost(`/auth/wishlist/${id}`, user?.token, {});
 
-    console.log(response);
     if (response.success) {
       toast.success(response.message);
     } else {

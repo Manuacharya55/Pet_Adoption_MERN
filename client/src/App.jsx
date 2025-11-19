@@ -26,6 +26,7 @@ import UserLayout from "./Layouts/UserLayout";
 import ShopKeeperLayout from "./Layouts/ShopKeeperLayout";
 import AdminLayout from "./Layouts/AdminLayout";
 import AdoptionRequestDetails from "./Pages/Shop/AdoptionRequestDetails";
+import History from "./Pages/Shop/History";
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
           <Route path="/shopkeeper/request/:id" element={<AdoptionRequestDetails />} />
           <Route path="/shopkeeper/addpet" element={<AddPet />} />
           <Route path="/shopkeeper/editpet/:id" element={<EditPet />} />
+          <Route path="/shopkeeper/history" element={<History />} />
         </Route>
 
         {/* admin routes */}

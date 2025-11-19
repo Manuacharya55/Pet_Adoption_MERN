@@ -279,6 +279,33 @@ table img {
   border-radius: 50%;
   object-fit: cover;
 }
+
+.tr-label{
+  display: none;
+}
+
+/* adoption card */
+.adoption-card{
+  max-width: 300px;
+  width: 100%;
+  padding: 20px;
+  background-color: var(--primary-color);
+  border-radius: 8px;
+  color: white;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.adoption-card img{
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: auto;
+}
 @media (max-width: 850px) {
   nav {
     padding: 20px;
@@ -357,5 +384,9 @@ table img {
   table th {
     display: block;
     width: 100%;
+  }
+
+  .tr-label{
+    display: inline-block;
   }
 }

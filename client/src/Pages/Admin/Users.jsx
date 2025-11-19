@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../../Components/NavBar";
 import { useSearchParams } from "react-router-dom";
-import { GrFormNext, GrFormPrevious } from "react-icons/gr";
+
 import { useAuth } from "../../Context/AuthContext";
-import {useGet} from "../../hooks/apiRequests"
+import { useGet } from "../../hooks/apiRequests";
+import Table from "../../Components/shared/Table";
+import { userHeader, userKey } from "../../Utils/Table";
 
 const Users = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [pets, setPets] = useState();
+  const [data, setData] = useState();
   const [params, setParams] = useSearchParams();
   const { user } = useAuth();
   const url = `/admin/users?page=${page}`;
@@ -16,8 +18,31 @@ const Users = () => {
   const fetchPets = async () => {
     setIsLoading(true);
     if (!user?.token) return;
-    const response = await useGet(url,user?.token)
-    setPets(response.data);
+
+    const response = await useGet(url, user?.token);
+    const users = response?.data?.users || [];
+
+    // map and safely destructure each user
+    const formatted = users.map((u) => {
+      const {
+        fullname: name,
+        email,
+        role,
+        address: { country = "", phonenumber: mobile = "" } = {},
+      } = u;
+
+      return {
+        name,
+        email,
+        role,
+        country,
+        mobile,
+      };
+    });
+
+    const { currentPage, totalPages } = response.data;
+
+    setData({ users: formatted, currentPage, totalPages });
     setIsLoading(false);
   };
 
@@ -34,55 +59,14 @@ const Users = () => {
     <>
       <div id="container">
         <h1 id="heading">All Users</h1>
-
-        <div id="table-holder">
-          <div id="table-option">
-            <button
-              disabled={pets?.currentPage <= 1}
-              onClick={() => setPage((prev) => prev - 1)}
-            >
-              <GrFormPrevious />
-            </button>
-            <span>
-              page : {pets?.currentPage} of {pets?.totalPages}{" "}
-            </span>
-            <button
-              disabled={pets?.currentPage >= pets?.totalPages}
-              onClick={() => setPage((prev) => prev + 1)}
-            >
-              <GrFormNext />
-            </button>
-          </div>
-
-          <table>
-            <thead>
-              <tr>
-                <th>name</th>
-                <th>email</th>
-                <th>role</th>
-                <th>country</th>
-                <th>phone number</th>
-                <th>view detail</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pets.users.length == 0
-                ? "No shops yet"
-                : pets.users.map((curele) => (
-                    <tr key={curele?._id}>
-                      <td>{curele?.fullname}</td>
-                      <td>{curele?.email}</td>
-                      <td>{curele?.role}</td>
-                      <td>{curele?.address?.country}</td>
-                      <td>{curele?.address?.phonenumber}</td>
-                      <td>
-                        <button>view details</button>
-                      </td>
-                    </tr>
-                  ))}
-            </tbody>
-          </table>
-        </div>
+        <Table
+          tableHeader={userHeader}
+          tableBody={data?.users}
+          tableKeys={userKey}
+          currentPage={data?.currentPage}
+          totalPages={data?.totalPages}
+          setPage={setPage}
+        />
       </div>
     </>
   );

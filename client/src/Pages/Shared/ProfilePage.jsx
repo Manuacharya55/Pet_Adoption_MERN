@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import { useGet } from "../../hooks/apiRequests";
+import toast from "react-hot-toast";
 
 const ProfilePage = () => {
   const url = `/auth/profile`;
@@ -20,11 +21,11 @@ const ProfilePage = () => {
     if (!user?.token) return;
 
     const response = await useGet(url, user?.token);
-    console.log(response)
+
     if (response.success) {
       setData(response?.data);
     } else {
-      console.log(response);
+      toast.error("Something went wrong")
     }
     setIsLoading(false);
   };

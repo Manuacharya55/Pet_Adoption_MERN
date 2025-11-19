@@ -22,7 +22,6 @@ export const addAddress = AsyncHandler(async (req, res) => {
 
   const existingAddress = await Address.findOne({ user: _id });
 
-  console.log(existingAddress);
   if (existingAddress) {
     throw new ApiError(400, "Address exists already");
   }

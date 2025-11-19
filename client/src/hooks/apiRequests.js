@@ -13,7 +13,6 @@ export const usePost = async(url, token="", data) => {
     })
     return response.data
   } catch (error) {
-    console.log(error.response.data)
     return error.response.data
   }
 };
@@ -26,10 +25,8 @@ export const usePatch = async(url, token="", data) => {
             "token" : token
         }
     })
-    console.log(response)
     return response.data
   } catch (error) {
-    console.log(error.response.data)
     return error.response.data
   }
 };
@@ -45,7 +42,6 @@ export const useGet = async(url, token="") => {
     })
     return response.data
   } catch (error) {
-    console.log(error.response.data)
     return error.response.data
   }
 };
@@ -60,7 +56,6 @@ export const useDelete = async(url, token="") => {
     })
     return response.data
   } catch (error) {
-    console.log(error.response.data)
     return error.response.data
   }
 };

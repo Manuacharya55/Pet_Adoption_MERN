@@ -13,21 +13,18 @@ export const getCategories = AsyncHandler(async (req, res) => {
 export const addCategory = AsyncHandler(async (req, res) => {
   const { name, image } = req.body;
 
-  console.log(name, image);
   if (!name || !image) {
     throw new ApiError(401, "All fields are required");
   }
 
   const existingCategory = await Category.findOne({ name });
 
-  console.log(existingCategory);
   if (existingCategory) {
     throw new ApiError(401, "Already category exists");
   }
 
-  console.log("here");
   const category = await Category.create({ name: name, image: image });
-  console.log(category);
+
   res
     .status(200)
     .json(new ApiSuccess(201, category, "Category added successfully"));

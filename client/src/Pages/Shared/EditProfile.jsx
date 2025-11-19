@@ -28,13 +28,12 @@ const EditProfile = () => {
     if (!user?.token) return;
 
     const response = await useGet(url, user?.token);
-    console.log(response);
     if (response.success) {
       Object.entries(response?.data || {}).forEach(([keyof, value]) =>
         setValue(keyof, value)
       );
     } else {
-      console.log(response);
+
     }
     setIsLoading(false);
   };

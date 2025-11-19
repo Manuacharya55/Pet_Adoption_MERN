@@ -1,53 +1,64 @@
-import {Schema, model} from 'mongoose';
-import bcrypt from 'bcrypt';
+import { Schema, model } from "mongoose";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const UserSchema = new Schema({
-    fullname:{
-        type:String,
-        required : true
+const UserSchema = new Schema(
+  {
+    avatar: {
+      type: String,
+      default:
+        "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3407.jpg?w=360",
     },
-    email:{
-        type:String,
-        required:true,
-        unique:true
+    fullname: {
+      type: String,
+      required: true,
     },
-    password:{
-        type:String,
-        required:true,
+    email: {
+      type: String,
+      required: true,
+      unique: true,
     },
-    address:{
-        type:Schema.Types.ObjectId,
-        ref :'Address'
+    password: {
+      type: String,
+      required: true,
     },
-    role:{
-        type:String,
-        enum:["user","admin","shopkeeper"],
-        default:"user"
+    address: {
+      type: Schema.Types.ObjectId,
+      ref: "Address",
     },
-    shop:{
-        type:Schema.Types.ObjectId,
-        ref:'Shop'
-    }
-},{timestamps:true});
+    role: {
+      type: String,
+      enum: ["user", "admin", "shopkeeper"],
+      default: "user",
+    },
+    shop: {
+      type: Schema.Types.ObjectId,
+      ref: "Shop",
+    },
+  },
+  { timestamps: true }
+);
 
-UserSchema.pre("save",async function(next){
-    if(!this.isModified("password")) return next()
-    
-    this.password = await bcrypt.hash(this.password,10);
-    return next()
-})
+UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
 
-UserSchema.methods.comparePassword = async function(password){
-    return bcrypt.compare(password,this.password)
-}
+  this.password = await bcrypt.hash(this.password, 10);
+  return next();
+});
 
-UserSchema.methods.generateToken = async function(){
-    return await jwt.sign({
-        _id:this._id,
-        role:this.role
-    },process.env.JWT_SECRET)
-}
+UserSchema.methods.comparePassword = async function (password) {
+  return bcrypt.compare(password, this.password);
+};
 
-const User = model("User",UserSchema);
+UserSchema.methods.generateToken = async function () {
+  return await jwt.sign(
+    {
+      _id: this._id,
+      role: this.role,
+    },
+    process.env.JWT_SECRET
+  );
+};
+
+const User = model("User", UserSchema);
 export default User;
