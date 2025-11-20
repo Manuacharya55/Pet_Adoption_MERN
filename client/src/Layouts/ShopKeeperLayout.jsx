@@ -1,16 +1,23 @@
-import React from 'react'
-import {Outlet} from "react-router-dom"
-import NavBar from "../Components/NavBar"
-import Footer from "../Components/Footer"
-import { shopkeeperNavbar } from '../Utils/Navbar'
-const ShopKeeperLayout = () => {
-  return (
-        <>
-        <NavBar array={shopkeeperNavbar}/>
-        <Outlet/>
-        <Footer array={shopkeeperNavbar}/>
-    </>
-  )
-}
+import { Outlet, Navigate } from "react-router-dom";
+import NavBar from "../Components/NavBar";
+import Footer from "../Components/Footer";
+import { shopkeeperNavbar } from '../Utils/Navbar';
+import { useAuth } from "../Context/AuthContext";
 
-export default ShopKeeperLayout
+const ShopKeeperLayout = () => {
+  const { user } = useAuth();
+
+  if (!user) return <Navigate to="/login" replace />;
+
+  if (user.role !== "shopkeeper") return <Navigate to="/login" replace />;
+
+  return (
+    <>
+      <NavBar array={shopkeeperNavbar} />
+      <Outlet />
+      <Footer array={shopkeeperNavbar} />
+    </>
+  );
+};
+
+export default ShopKeeperLayout;

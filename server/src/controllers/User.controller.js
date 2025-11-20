@@ -56,6 +56,7 @@ export const loginUser = AsyncHandler(async (req, res) => {
     email: existingUser.email,
     address: existingUser.address,
     token,
+    role:existingUser.role
   };
   res
     .status(200)
