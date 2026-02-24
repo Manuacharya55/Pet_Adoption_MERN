@@ -62,17 +62,21 @@ export const updateAddress = AsyncHandler(async (req, res) => {
     throw ApiError(401, "All fields are required");
   }
 
-  const existingAddress = await Address.findByIdAndUpdate(addressId, {
-    $set: {
-      country: country,
-      state: state,
-      district: district,
-      phonenumber: phonenumber,
-      address: address,
-      lat: lat,
-      lng: lng,
+  const existingAddress = await Address.findOneAndUpdate(
+    { _id: addressId, user: req.user._id },
+    {
+      $set: {
+        country: country,
+        state: state,
+        district: district,
+        phonenumber: phonenumber,
+        address: address,
+        lat: lat,
+        lng: lng,
+      },
     },
-  },{new:true});
+    { new: true }
+  );
 
   if (!existingAddress) {
     throw new ApiError(400, "No Such Address exists");

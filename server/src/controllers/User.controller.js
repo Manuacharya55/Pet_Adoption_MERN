@@ -48,6 +48,12 @@ export const loginUser = AsyncHandler(async (req, res) => {
     throw new ApiError(401, "No Such User");
   }
 
+  const isPasswordValid = await existingUser.comparePassword(password);
+
+  if (!isPasswordValid) {
+    throw new ApiError(401, "Invalid user credentials");
+  }
+
   const token = await existingUser.generateToken();
 
   const data = {
@@ -126,7 +132,7 @@ export const addTowishlist = AsyncHandler(async (req, res) => {
   const existingWishlist = await Wishlist.findOne({ user: _id, pet: petId });
 
   if (existingWishlist) {
-    res.status(201).json(new ApiSuccess(201, "", "Pet added to wishlist"));
+    return res.status(201).json(new ApiSuccess(201, "", "Pet added to wishlist"));
   }
   const wishlist = await Wishlist.create({
     user: _id,
@@ -146,13 +152,13 @@ export const removeFromwishlist = AsyncHandler(async (req, res) => {
     throw new ApiError(404, "No such pets");
   }
 
-  const existingWishlist = await Wishlist.deleteOne({ user: _id, pet: petId });
+  const result = await Wishlist.deleteOne({ user: _id, pet: petId });
 
-  if (!existingWishlist) {
+  if (result.deletedCount === 0) {
     throw new ApiError(401, "No Such Pets in Wishlist");
   }
 
   res
     .status(201)
-    .json(new ApiSuccess(201, existingWishlist, "Pet removed from wishlist"));
+    .json(new ApiSuccess(201, {}, "Pet removed from wishlist"));
 });

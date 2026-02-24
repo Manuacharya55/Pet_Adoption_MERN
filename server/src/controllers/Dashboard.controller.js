@@ -109,11 +109,11 @@ export const shopkeeperDashBoard = AsyncHandler(async (req, res) => {
       },
       {
         name: "total female pets",
-        count: malePets,
+        count: femalePets,
       },
       {
         name: "total male pets",
-        count: femalePets,
+        count: malePets,
       }
     ],
   };

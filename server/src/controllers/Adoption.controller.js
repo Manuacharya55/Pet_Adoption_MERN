@@ -191,6 +191,8 @@ export const updateRequests = AsyncHandler(async (req, res) => {
       { new: true }
     );
 
+    await Pets.findByIdAndUpdate(petId, { isAdopted: true });
+
     // reject others
     await Adoption.updateMany(
       {
@@ -201,7 +203,7 @@ export const updateRequests = AsyncHandler(async (req, res) => {
     );
 
     response = approved;
-    await sendBulkMail();
+    await sendBulkMail(petId);
   }
 
   res.status(200).json(new ApiSuccess(200, response, "updated successfully"));

@@ -146,6 +146,11 @@ export const updatePet = AsyncHandler(async (req, res) => {
     throw new ApiError(401, "No Such shop exists");
   }
 
+  const existingPet = await Pets.findOne({ _id: petId, shop: shop });
+  if (!existingPet) {
+    throw new ApiError(404, "Pet not found or you do not have permission");
+  }
+
   const pet = await Pets.findByIdAndUpdate(
     petId,
     {
@@ -176,6 +181,11 @@ export const deletePet = AsyncHandler(async (req, res) => {
     throw new ApiError(401, "No Such shop exists");
   }
 
+  const existingPet = await Pets.findOne({ _id: petId, shop: shop });
+  if (!existingPet) {
+    throw new ApiError(404, "Pet not found or you do not have permission");
+  }
+
   const pet = await Pets.findByIdAndUpdate(
     petId,
     {
@@ -185,10 +195,6 @@ export const deletePet = AsyncHandler(async (req, res) => {
     },
     { new: true }
   );
-
-  if (!pet) {
-    throw new ApiError(401, "No such pets");
-  }
 
   res.status(201).json(new ApiSuccess(201, pet, "Pet deletd successfully"));
 });

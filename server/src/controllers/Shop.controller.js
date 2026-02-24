@@ -85,7 +85,7 @@ export const getSingleShop = AsyncHandler(async (req, res) => {
   }
 
   const count = await Pet.countDocuments({ isAdopted: false, shop: shopId });
-  const pets = await Pet.find({ isAdopted: false }).populate("category").limit(limit).skip(skip);
+  const pets = await Pet.find({ isAdopted: false, shop: shopId }).populate("category").limit(limit).skip(skip);
 
   const data = {
     shop: shop,
