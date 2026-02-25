@@ -12,7 +12,6 @@ function buildHtmlForUser(data) {
   `;
 }
 
-// Create transporter lazily and reuse it
 let transporter = null;
 
 const getTransporter = () => {
@@ -21,12 +20,11 @@ const getTransporter = () => {
   transporter = nodemailer.createTransport({
     host: process.env.HOST,
     port: Number(process.env.SMTP_PORT),
-    secure: false, // true for 465, false for other ports
+    secure: false, 
     auth: {
       user: process.env.NODEMAILER_USER,
       pass: process.env.NODEMAILER_PASSWORD
     },
-    // Adding pooling for better bulk performance
     pool: true,
     maxConnections: 5,
     maxMessages: 100
@@ -40,8 +38,6 @@ export const sendEmail = async (payload) => {
   const transporterInstance = getTransporter();
   const results = [];
 
-  // Use Promise.all with a limit or just iterate if number is manageable
-  // For bulk, sequential with reuse is safer for small SMTP limits
   for (const data of list) {
     if (!data.email) {
       results.push({ ok: false, error: "Missing email", data });
