@@ -86,9 +86,15 @@ export const userProfile = AsyncHandler(async (req, res) => {
 export const updateProfile = AsyncHandler(async (req, res) => {
   const { _id } = req.user;
   const { email, fullname, avatar } = req.body;
+
+  const updates = {};
+  if (email) updates.email = email;
+  if (fullname) updates.fullname = fullname;
+  if (avatar) updates.avatar = avatar;
+
   const existingUser = await User.findByIdAndUpdate(
     _id,
-    { $set: { fullname, email, avatar } },
+    { $set: updates },
     { new: true }
   );
 

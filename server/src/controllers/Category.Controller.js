@@ -34,13 +34,13 @@ export const updateCategory = AsyncHandler(async (req, res) => {
   const { name, image } = req.body;
   const { categoryId } = req.params;
 
-  if (!name || !image) {
-    throw new ApiError(401, "All fields are required");
-  }
+  const updates = {};
+  if (name) updates.name = name;
+  if (image) updates.image = image;
 
   const category = await Category.findByIdAndUpdate(
     categoryId,
-    { $set: { name, image } },
+    { $set: updates },
     { new: true }
   );
 
