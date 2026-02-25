@@ -5,14 +5,15 @@ import { useAuth } from "../../Context/AuthContext";
 import { useGet, usePatch, usePost } from "../../hooks/apiRequests";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { profileSchema } from "../../Utils/ZodForm";
+import { profileSchema } from "../../Schema/ProfileSchema";
 import toast from "react-hot-toast";
-import { handleUpload } from "../../Utils/Appwrite";
 import { useNavigate } from "react-router-dom";
+import ImageInput from "../../Components/ui/ImageInput";
 
 const EditProfile = () => {
   const url = `/auth/profile`;
   const [isLoading, setIsLoading] = useState(true);
+  const [currentAvatar, setCurrentAvatar] = useState("");
   const { user } = useAuth();
   const navigate = useNavigate();
   const {
@@ -29,9 +30,10 @@ const EditProfile = () => {
 
     const response = await useGet(url, user?.token);
     if (response.success) {
-      Object.entries(response?.data || {}).forEach(([keyof, value]) =>
-        setValue(keyof, value)
-      );
+      Object.entries(response?.data || {}).forEach(([key, value]) => {
+        setValue(key, value);
+        if (key === "avatar") setCurrentAvatar(value);
+      });
     } else {
 
     }
@@ -42,11 +44,6 @@ const EditProfile = () => {
     if (user?.token) fetchProfile();
   }, [user?.token]);
 
-  const handleImageChange = async (e) => {
-    const url = await handleUpload(e.target.files[0]);
-    setValue("avatar", url);
-    toast.success("image uploaded successfully");
-  };
 
   const myFunc = async (data) => {
     if (!user?.token) return;
@@ -68,29 +65,44 @@ const EditProfile = () => {
         {isLoading ? (
           "Loading..."
         ) : (
-          <form onSubmit={handleSubmit(myFunc)}>
-            <input type="file" name="" id="" onChange={handleImageChange} />
-            {errors?.avatar && <span className="error">{errors.avatar.message}</span>}
-            <input
-              type="text"
-              name="fullname"
-              placeholder="Enter your name"
-              {...register("fullname")}
+          <form onSubmit={handleSubmit(myFunc)} className="form-grid" style={{ maxWidth: '600px', margin: '0 auto' }}>
+            <ImageInput
+              name="avatar"
+              setValue={setValue}
+              error={errors.avatar}
+              defaultValue={currentAvatar}
+              label="Profile Picture"
             />
-            {errors?.fullname && <span className="error">{errors.fullname.message}</span>}
-            <input
-              type="text"
-              name="email"
-              id=""
-              placeholder="Enter your email"
-              {...register("email")}
-            />
-            {errors?.email && <span className="error">{errors.email.message}</span>}
-            <Button
-              type="main"
-              buttonName={"update profile"}
-              isSubmitting={isSubmitting}
-            />
+
+            <div className="form-group full-width">
+              <label>Full Name</label>
+              <input
+                type="text"
+                placeholder="Enter your name"
+                {...register("fullname")}
+                className={errors.fullname ? "error-border" : ""}
+              />
+              {errors?.fullname && <span className="error-text">{errors.fullname.message}</span>}
+            </div>
+
+            <div className="form-group full-width">
+              <label>Email Address</label>
+              <input
+                type="text"
+                placeholder="Enter your email"
+                {...register("email")}
+                className={errors.email ? "error-border" : ""}
+              />
+              {errors?.email && <span className="error-text">{errors.email.message}</span>}
+            </div>
+
+            <div className="full-width">
+              <Button
+                type="main"
+                buttonName={"Update Profile"}
+                isSubmitting={isSubmitting}
+              />
+            </div>
           </form>
         )}
       </div>

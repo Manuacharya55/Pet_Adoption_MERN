@@ -8,24 +8,22 @@ import { useGet } from "../../hooks/apiRequests";
 import toast from "react-hot-toast";
 
 const ProfilePage = () => {
+  console.log("ProfilePage Component Rendered (New Version)");
   const url = `/auth/profile`;
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
-
   const navigate = useNavigate();
 
   const fetchProfile = async () => {
     setIsLoading(true);
-
     if (!user?.token) return;
 
     const response = await useGet(url, user?.token);
-
     if (response.success) {
       setData(response?.data);
     } else {
-      toast.error("Something went wrong")
+      toast.error("Something went wrong");
     }
     setIsLoading(false);
   };
@@ -35,39 +33,55 @@ const ProfilePage = () => {
   }, [user?.token]);
 
   return isLoading ? (
-    "...Loading"
+    <div className="loading-container">Loading...</div>
   ) : (
-    <>
-      <div id="container">
-        <h1 id="heading">Your Profile</h1>
+    <div id="container">
+      <h1 id="heading">My Profile</h1>
 
-        <div id="profile-holder">
-          <img src="puppy.jpg" alt="" />
-          <span id="user-name">{data?.fullname}</span>
-          <button
-            onClick={() => {
-              navigate(`/profile/${data?._id}`);
-            }}
-          >
-            edit profile
-          </button>
-          <button
-            onClick={() => {
-              navigate(`/address/${data?.address}`);
-            }}
-          >
-            edit address
-          </button>
-          {data?.role === "user" && <button
-            onClick={() => {
-              navigate("/become-shopkeeper");
-            }}
-          >
-            become shopkeeper
-          </button>}
+      <div className="profile-dashboard">
+        <div className="profile-card glass">
+          <div className="profile-hero" style={{padding:"20px"}}>
+            <div className="profile-avatar-wrapper">
+              <img src={data?.avatar || "/default-avatar.png"} alt={data?.fullname} className="profile-avatar" />
+            </div>
+            <div className="profile-header-info">
+              <h2>{data?.fullname}</h2>
+              <span className={`role-badge role-${data?.role}`}>{data?.role}</span>
+              <p className="profile-email">{data?.email}</p>
+            </div>
+          </div>
+
+          <div className="profile-actions" style={{padding:"20px",display:"flex",gap:"20px"}}>
+            <button className="btn-secondary" onClick={() => navigate(`/profile/${data?._id}`)}>
+              Edit Profile
+            </button>
+            <button className="btn-secondary" onClick={() => navigate(`/address/${data?.address?._id || data?.address}`)}>
+              Edit Address
+            </button>
+            {data?.role === "user" && (
+              <button className="btn-primary" onClick={() => navigate("/become-shopkeeper")}>
+                Become Shopkeeper
+              </button>
+            )}
+          </div>
         </div>
+
+        {data?.address && (
+          <div className="profile-details-grid">
+            <div className="info-card glass">
+              <h3>Address Information</h3>
+              <div className="info-content">
+                <p><strong>Country:</strong> {data.address.country}</p>
+                <p><strong>State:</strong> {data.address.state}</p>
+                <p><strong>District:</strong> {data.address.district}</p>
+                <p><strong>Phone:</strong> {data.address.phonenumber}</p>
+                <p className="mt-2 text-muted"><strong>Full Address:</strong><br />{data.address.address}</p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 

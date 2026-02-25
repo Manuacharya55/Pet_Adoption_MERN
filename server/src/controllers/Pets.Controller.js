@@ -10,7 +10,7 @@ export const getPet = AsyncHandler(async (req, res) => {
   const page = Number(req.query.page) || 1;
   const limit = 12;
   const skip = (page - 1) * limit;
-  let filter = { isAdopted: false,isActive:true };
+  let filter = { isAdopted: false, isActive: true };
 
   if (req.query?.gender && req.query?.gender !== "all") {
     filter.gender = req.query.gender;
@@ -18,6 +18,10 @@ export const getPet = AsyncHandler(async (req, res) => {
 
   if (req.query?.category && req.query?.category !== "all") {
     filter.category = req.query.category;
+  }
+
+  if (req.query?.name) {
+    filter.name = { $regex: req.query.name, $options: "i" };
   }
 
   const [count, pet] = await Promise.all([
@@ -36,7 +40,7 @@ export const getPet = AsyncHandler(async (req, res) => {
 
 export const getMyPet = AsyncHandler(async (req, res) => {
   const { shop } = req.user;
-  const pets = await Pets.find({ shop: shop,isActive:true,isAdopted:false })
+  const pets = await Pets.find({ shop: shop, isActive: true, isAdopted: false })
     .select("category price image name")
     .populate("category");
   res.status(200).json(new ApiSuccess(200, pets, "Data fetched successfully"));
@@ -76,6 +80,7 @@ export const addPet = AsyncHandler(async (req, res) => {
     req.body;
   const { _id, shop } = req.user;
 
+  console.log({ name, description, image, breed, age, gender, category, price })
   if (
     !name ||
     !description ||
@@ -122,7 +127,9 @@ export const updatePet = AsyncHandler(async (req, res) => {
     req.body;
   const { _id, shop } = req.user;
   const { petId } = req.params;
-
+  console.log("===============================================================")
+  console.log({ name, description, image, breed, age, gender, category, price })
+  console.log("===============================================================")
   if (
     !name ||
     !description ||
@@ -146,8 +153,8 @@ export const updatePet = AsyncHandler(async (req, res) => {
     throw new ApiError(401, "No Such shop exists");
   }
 
-  const pet = await Pets.findByIdAndUpdate(
-    petId,
+  const pet = await Pets.findOneAndUpdate(
+    { _id: petId, shop: shop },
     {
       $set: {
         name,
@@ -164,6 +171,10 @@ export const updatePet = AsyncHandler(async (req, res) => {
     { new: true }
   );
 
+  if (!pet) {
+    throw new ApiError(403, "Pet not found or you do not have permission to update it");
+  }
+
   res.status(201).json(new ApiSuccess(201, pet, "Pet updated successfully"));
 });
 
@@ -176,8 +187,8 @@ export const deletePet = AsyncHandler(async (req, res) => {
     throw new ApiError(401, "No Such shop exists");
   }
 
-  const pet = await Pets.findByIdAndUpdate(
-    petId,
+  const pet = await Pets.findOneAndUpdate(
+    { _id: petId, shop: shop },
     {
       $set: {
         isActive: false,
@@ -187,7 +198,7 @@ export const deletePet = AsyncHandler(async (req, res) => {
   );
 
   if (!pet) {
-    throw new ApiError(401, "No such pets");
+    throw new ApiError(403, "Pet not found or you do not have permission to delete it");
   }
 
   res.status(201).json(new ApiSuccess(201, pet, "Pet deletd successfully"));

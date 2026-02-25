@@ -80,13 +80,13 @@ export const shopkeeperDashBoard = AsyncHandler(async (req, res) => {
     throw new ApiError(401, "No such shop");
   }
 
-  const [totalPets, activePets, approvedRequest, rejectedRequest,malePets,femalePets] = await Promise.all([
+  const [totalPets, activePets, approvedRequest, rejectedRequest, malePets, femalePets] = await Promise.all([
     await Pets.countDocuments({ shop: shop }),
     await Pets.countDocuments({ isAdopted: false, shop: shop }),
     await Adoption.countDocuments({ status: "approved", shop: shop }),
     await Adoption.countDocuments({ status: "rejected", shop: shop }),
-    await Pets.countDocuments({ isAdopted: false, shop: shop,gender:"male"}),
-    await Pets.countDocuments({ isAdopted: false, shop: shop,gender:"female"}),
+    await Pets.countDocuments({ isAdopted: false, shop: shop, gender: "male" }),
+    await Pets.countDocuments({ isAdopted: false, shop: shop, gender: "female" }),
   ]);
 
   const data = {
@@ -109,11 +109,11 @@ export const shopkeeperDashBoard = AsyncHandler(async (req, res) => {
       },
       {
         name: "total female pets",
-        count: malePets,
+        count: femalePets,
       },
       {
         name: "total male pets",
-        count: femalePets,
+        count: malePets,
       }
     ],
   };

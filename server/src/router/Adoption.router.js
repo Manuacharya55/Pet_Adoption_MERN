@@ -5,6 +5,7 @@ import {
   getActiveAdoptionRequest,
   getAdoptionRequestHistory,
   getSingleAdoptionRequest,
+  notifyUsers,
   updateRequests,
 } from "../controllers/Adoption.controller.js";
 
@@ -20,5 +21,7 @@ router
   .route("/:petId")
   .get(verifyJWT, getSingleAdoptionRequest)
   .patch(verifyJWT, updateRequests);
+
+router.post("/notify/:petId", verifyJWT, notifyUsers);
 
 export default router;

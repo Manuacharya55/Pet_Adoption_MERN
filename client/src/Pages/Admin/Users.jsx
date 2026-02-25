@@ -7,15 +7,22 @@ import { useGet } from "../../hooks/apiRequests";
 import Table from "../../Components/shared/Table";
 import { userHeader, userKey } from "../../Utils/Table";
 
+import Modal from "../../Components/ui/Modal";
+
 const Users = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [data, setData] = useState();
   const [params, setParams] = useSearchParams();
   const { user } = useAuth();
+
+  // Modal states
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+
   const url = `/admin/users?page=${page}`;
 
-  const fetchPets = async () => {
+  const fetchUsers = async () => {
     setIsLoading(true);
     if (!user?.token) return;
 
@@ -28,7 +35,8 @@ const Users = () => {
         fullname: name,
         email,
         role,
-        address: { country = "", phonenumber: mobile = "" } = {},
+        address: { country = "", phonenumber: mobile = "", state = "", district = "", address = "" } = {},
+        _id
       } = u;
 
       return {
@@ -37,6 +45,11 @@ const Users = () => {
         role,
         country,
         mobile,
+        // Meta for modal
+        state,
+        district,
+        address,
+        _id
       };
     });
 
@@ -48,13 +61,18 @@ const Users = () => {
 
   useEffect(() => {
     if (user?.token) {
-      fetchPets();
+      fetchUsers();
       setParams({ page: page });
     }
   }, [page, user?.token]);
 
+  const handleViewDetails = (item) => {
+    setSelectedUser(item);
+    setIsModalOpen(true);
+  };
+
   return isLoading ? (
-    "Loading..."
+    <div className="loading-container">Loading...</div>
   ) : (
     <>
       <div id="container">
@@ -66,8 +84,57 @@ const Users = () => {
           currentPage={data?.currentPage}
           totalPages={data?.totalPages}
           setPage={setPage}
+          onAction={handleViewDetails}
         />
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="User Details"
+      >
+        {selectedUser && (
+          <div className="detail-modal-content">
+            <div className="user-profile-header">
+              <div className="user-avatar-large">
+                {selectedUser.name.charAt(0)}
+              </div>
+              <div className="user-header-info">
+                <h3>{selectedUser.name}</h3>
+                <span className={`role-badge role-${selectedUser.role}`}>{selectedUser.role}</span>
+              </div>
+            </div>
+
+            <div className="info-grid mt-4">
+              <div className="info-item">
+                <label>Email Address</label>
+                <p>{selectedUser.email}</p>
+              </div>
+              <div className="info-item">
+                <label>Mobile Number</label>
+                <p>{selectedUser.mobile || "N/A"}</p>
+              </div>
+            </div>
+
+            {selectedUser.address && (
+              <div className="info-section mt-4">
+                <h4>Address Information</h4>
+                <div className="info-grid">
+                  <div className="info-item">
+                    <label>Street Address</label>
+                    <p>{selectedUser.address}</p>
+                  </div>
+                  <div className="info-item">
+                    <label>Location</label>
+                    <p>{selectedUser.district}, {selectedUser.state}</p>
+                    <p>{selectedUser.country}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </Modal>
     </>
   );
 };

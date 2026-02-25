@@ -48,15 +48,21 @@ export const addShop = AsyncHandler(async (req, res) => {
 });
 
 export const getShops = AsyncHandler(async (req, res) => {
+  const { shopname } = req.query;
   const page = Number(req.query.page) || 1;
   const limit = 12;
   const skip = (page - 1) * limit;
 
-  const shops = await Shop.find()
+  const query = {};
+  if (shopname) {
+    query.shopname = { $regex: shopname, $options: "i" };
+  }
+
+  const shops = await Shop.find(query)
     .select("shopname image")
     .skip(skip)
     .limit(limit);
-  const count = await Shop.countDocuments();
+  const count = await Shop.countDocuments(query);
 
   const data = {
     shops,
@@ -76,16 +82,16 @@ export const getSingleShop = AsyncHandler(async (req, res) => {
   const shop = await Shop.findById(shopId).select("-createdAt -updatedAt -pet").populate([
     {
       path: "address",
-      select : "phonenumber lat lng"
+      select: "phonenumber lat lng"
     },
-    { path: "user", select: "email" },
+    { path: "user", select: "email " },
   ]);
   if (!shop) {
     throw new ApiError(400, "No such shop");
   }
 
   const count = await Pet.countDocuments({ isAdopted: false, shop: shopId });
-  const pets = await Pet.find({ isAdopted: false }).populate("category").limit(limit).skip(skip);
+  const pets = await Pet.find({ isAdopted: false, shop: shopId }).populate("category").limit(limit).skip(skip);
 
   const data = {
     shop: shop,

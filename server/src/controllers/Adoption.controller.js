@@ -128,7 +128,7 @@ export const getAdoptionRequestHistory = AsyncHandler(async (req, res) => {
       },
       {
         path: "pet",
-        select: "name avatar price",
+        select: "name avatar price image",
       },
     ])
     .skip(skip)
@@ -191,6 +191,9 @@ export const updateRequests = AsyncHandler(async (req, res) => {
       { new: true }
     );
 
+    // Mark pet as adopted
+    await Pets.findByIdAndUpdate(petId, { isAdopted: true });
+
     // reject others
     await Adoption.updateMany(
       {
@@ -201,8 +204,14 @@ export const updateRequests = AsyncHandler(async (req, res) => {
     );
 
     response = approved;
-    await sendBulkMail();
+    await sendBulkMail(petId);
   }
 
   res.status(200).json(new ApiSuccess(200, response, "updated successfully"));
+});
+
+export const notifyUsers = AsyncHandler(async (req, res) => {
+  const { petId } = req.params;
+  await sendBulkMail(petId);
+  res.status(200).json(new ApiSuccess(200, {}, "Notifications sent successfully"));
 });

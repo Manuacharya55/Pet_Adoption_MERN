@@ -10,6 +10,7 @@ const Table = ({
     currentPage,
     totalPages,
     setPage,
+    onAction,
 }) => {
     return (
         <div id="table-holder">
@@ -21,7 +22,11 @@ const Table = ({
 
             <table>
                 <Header tableHeader={tableHeader} />
-                <Body tableBody={tableBody} tableKeys={tableKeys} />
+                <Body
+                    tableBody={tableBody}
+                    tableKeys={tableKeys}
+                    onAction={onAction}
+                />
             </table>
         </div>
     );

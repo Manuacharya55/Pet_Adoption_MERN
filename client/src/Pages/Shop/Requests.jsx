@@ -30,22 +30,28 @@ const Requests = () => {
       fetchAdoptionRequest();
     }
   }, [user?.token]);
-  return isLoading ? "Loading" : (<>
-    <h1 id="heading">Adoption Requests</h1>
-    <div id="card-holder">
-            {pets?.length === 0
-              ? "No Pets Yet"
-              : pets?.map((pet) => (
-                  <Card heading={pet.name} img={pet.image} key={pet._id}>
-                    <div className="btn-holder">
-                      <button onClick={() => navigate(`/shopkeeper/request/${pet._id}`)}>
-                        more details
-                      </button>
-                    </div>
-                  </Card>
-                ))}
-          </div>
-  </>)
+  return isLoading ? (
+    <div className="loading-state">Loading adoption requests...</div>
+  ) : (
+    <div id="container">
+      <h1 id="heading">Adoption Requests</h1>
+      <div id="card-holder">
+        {pets?.length === 0 ? (
+          <div className="no-data-state">No adoption requests found.</div>
+        ) : (
+          pets?.map((pet) => (
+            <Card heading={pet.name} img={pet.image} key={pet._id}>
+              <div className="btn-holder">
+                <button onClick={() => navigate(`/shopkeeper/request/${pet._id}`)}>
+                  View Requests
+                </button>
+              </div>
+            </Card>
+          ))
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default Requests;

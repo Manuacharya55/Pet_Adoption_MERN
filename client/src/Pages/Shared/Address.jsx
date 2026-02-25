@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "leaflet/dist/leaflet.css";
-import z from "zod";
 import MapComponent from "../../Components/shared/MapComponent";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,15 +7,8 @@ import { usePost } from "../../hooks/apiRequests";
 import { useAuth } from "../../Context/AuthContext";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import AddressForm from "../../Components/Forms/AddressForm";
-
-const addressSchema = z.object({
-  phonenumber: z.string().length(10, "Phone number must be 10 digits"),
-  address: z.string().min(1, "Address is required"),
-  state: z.string().min(1, "State is required"),
-  district: z.string().min(1, "District is required"),
-  country: z.string().min(1, "Country is required"),
-});
+import { addressSchema } from "../../Schema/AddressSchema";
+import AddressForm from "../../form/AddressForm";
 
 const Address = () => {
   const url = "/address";
@@ -30,14 +22,13 @@ const Address = () => {
     setValue,
   } = useForm({ resolver: zodResolver(addressSchema) });
 
-
-  const myFunc = async (data) => {
+  const onSubmit = async (data) => {
     if (!user?.token) return;
-    data = { ...data, lat: location[0], lng: location[1] };
-    const response = await usePost(url, user?.token, data);
+    const finalData = { ...data, lat: location[0], lng: location[1] };
+    const response = await usePost(url, user?.token, finalData);
     if (response.success) {
       toast.success(response.message);
-      navigate("/homepage");
+      navigate("/home");
     } else {
       toast.error(response.message);
     }
@@ -56,11 +47,12 @@ const Address = () => {
       <div className="address-form">
         <h1 id="title">Add Address</h1>
         <AddressForm
+          register={register}
           handleSubmit={handleSubmit}
-          myFunc={myFunc}
+          onSubmit={onSubmit}
           errors={errors}
           isSubmitting={isSubmitting}
-          register={register}
+          buttonName="Add Address"
         />
       </div>
     </div>

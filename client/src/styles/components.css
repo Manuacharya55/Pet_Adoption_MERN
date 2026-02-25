@@ -26,6 +26,7 @@ nav {
 nav #logo {
   color: var(--primary-color);
 }
+
 nav ul {
   display: flex;
   align-items: center;
@@ -41,6 +42,7 @@ nav ul div {
   justify-content: center;
   font-size: 2rem;
 }
+
 nav ul a {
   text-decoration: none;
   color: black;
@@ -55,6 +57,7 @@ nav ul a:hover {
 nav ul a.active {
   color: var(--primary-color);
 }
+
 .hamburger {
   display: none;
   cursor: pointer;
@@ -66,7 +69,8 @@ nav ul a.active {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: -450%; /* hidden above screen */
+  top: -450%;
+  /* hidden above screen */
   width: 95%;
   backdrop-filter: blur(35px);
   flex-direction: column;
@@ -80,7 +84,8 @@ nav ul a.active {
 }
 
 #menu.open {
-  top: 80px; /* visible below navbar */
+  top: 80px;
+  /* visible below navbar */
 }
 
 /* tile styles */
@@ -153,6 +158,7 @@ footer ul a {
   width: 280px;
   height: 280px;
   border-radius: 10px;
+  object-fit: cover;
 }
 
 .card .card-heading {
@@ -193,6 +199,13 @@ button {
   border-radius: 25px;
   background-color: var(--primary-color);
   color: white;
+}
+
+.header-with-action button{
+  width: fit-content;
+  border-radius: 5px;
+  margin-left: auto;
+  display: block;
 }
 
 button:nth-child(1) {
@@ -273,6 +286,7 @@ table th {
 table button {
   width: fit-content;
 }
+
 table img {
   height: 40px;
   width: 40px;
@@ -280,12 +294,12 @@ table img {
   object-fit: cover;
 }
 
-.tr-label{
+.tr-label {
   display: none;
 }
 
 /* adoption card */
-.adoption-card{
+.adoption-card {
   max-width: 300px;
   width: 100%;
   padding: 20px;
@@ -298,7 +312,7 @@ table img {
   flex-direction: column;
 }
 
-.adoption-card img{
+.adoption-card img {
   width: 120px;
   height: 120px;
   border-radius: 50%;
@@ -306,11 +320,13 @@ table img {
   display: block;
   margin: auto;
 }
+
 @media (max-width: 850px) {
   nav {
     padding: 20px;
     width: 100%;
   }
+
   .hideonmobile {
     display: none;
   }
@@ -347,7 +363,7 @@ table img {
     font-size: 10px;
   }
 
-  #footer-bottom span{
+  #footer-bottom span {
     font-size: 1rem;
   }
 }
@@ -376,17 +392,19 @@ table img {
     flex-direction: column;
     gap: 15px;
   }
+
   table tr {
     border: 1px solid var(--primary-color);
     border-radius: 8px;
   }
+
   table td,
   table th {
     display: block;
     width: 100%;
   }
 
-  .tr-label{
+  .tr-label {
     display: inline-block;
   }
 }

@@ -24,3 +24,17 @@ export const verifyJWT = AsyncHandler(async (req, res, next) => {
   req.user = user;
   next();
 });
+
+export const verifyAdmin = (req, res, next) => {
+  if (req.user.role !== "admin") {
+    throw new ApiError(403, "Admin access required");
+  }
+  next();
+};
+
+export const verifyShopkeeper = (req, res, next) => {
+  if (req.user.role !== "shopkeeper" && req.user.role !== "admin") {
+    throw new ApiError(403, "Shopkeeper or Admin access required");
+  }
+  next();
+};

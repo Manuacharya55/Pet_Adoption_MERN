@@ -7,16 +7,17 @@ connectDB();
 const app = express();
 
 dotenv.config({
-    path:"../.env"
+    path: "../.env"
 });
 
 app.use(cors())
-app.use(express.json())
+app.use(express.json({ limit: "100mb" }));
+app.use(express.urlencoded({ limit: "100mb", extended: true }));
 
-app.get("/",(req,res)=>{
+app.get("/", (req, res) => {
     res.json({
-        success:true,
-        message:"Hi from server"
+        success: true,
+        message: "Hi from server"
     })
 })
 
@@ -28,23 +29,25 @@ import petRouter from "./router/Pets.router.js"
 import adminRouter from "./router/Admin.router.js"
 import dashboardRouter from "./router/Dashboard.router.js"
 import adoptionRouter from "./router/Adoption.router.js"
+import statsRouter from "./router/Stats.router.js"
 
 import { GlobalErrorHandler } from "./utils/GlobalError.js";
 
-app.use("/api/v1/auth",authRouter);
-app.use("/api/v1/address",addressRouter);
-app.use("/api/v1/shop",shopRouter);
-app.use("/api/v1/category",categoryRouter);
-app.use("/api/v1/pet",petRouter);
-app.use("/api/v1/admin",adminRouter);
-app.use("/api/v1/dashboard",dashboardRouter);
-app.use("/api/v1/adoption",adoptionRouter);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/address", addressRouter);
+app.use("/api/v1/shop", shopRouter);
+app.use("/api/v1/category", categoryRouter);
+app.use("/api/v1/pet", petRouter);
+app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/dashboard", dashboardRouter);
+app.use("/api/v1/adoption", adoptionRouter);
+app.use("/api/v1/stats", statsRouter);
 
 
 app.use(GlobalErrorHandler)
 
 const PORT = process.env.PORT || 4000
 
-app.listen(PORT,()=>{
+app.listen(PORT, () => {
     console.log(`server running at : http://localhost:${PORT}/`)
 })

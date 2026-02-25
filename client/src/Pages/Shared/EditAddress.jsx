@@ -3,11 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addressSchema } from "../../Utils/ZodForm";
 import MapComponent from "../../Components/shared/MapComponent";
-import AddressForm from "../../Components/Forms/AddressForm";
 import { useGet, usePatch } from "../../hooks/apiRequests";
 import toast from "react-hot-toast";
+import { addressSchema } from "../../Schema/AddressSchema";
+import AddressForm from "../../form/AddressForm";
 
 const EditAddress = () => {
   const { id } = useParams();
@@ -15,25 +15,25 @@ const EditAddress = () => {
   const [location, setLocation] = useState([51.505, -0.09]);
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
     setValue,
   } = useForm({ resolver: zodResolver(addressSchema) });
 
-  const myFunc = async (data) => {
+  const onSubmit = async (data) => {
     if (!user?.token) return;
 
-    data = {
+    const finalData = {
       ...data,
       lat: location[0],
       lng: location[1],
     };
 
-    const response = await usePatch(url, user?.token, data);
+    const response = await usePatch(url, user?.token, finalData);
     if (response.success) {
       toast.success(response.message);
       navigate("/profile");
@@ -43,11 +43,9 @@ const EditAddress = () => {
   };
 
   const fetchAddress = async () => {
-    setIsLoading(true);
     if (!id || !user?.token) return;
 
     const response = await useGet(url, user?.token);
-
     if (response.success) {
       const { phonenumber, address, state, district, country, lat, lng } =
         response.data;
@@ -59,9 +57,8 @@ const EditAddress = () => {
       setValue("district", district);
       setValue("country", country);
     } else {
-      alert("error");
+      toast.error("Error fetching address");
     }
-
     setIsLoading(false);
   };
 
@@ -69,9 +66,9 @@ const EditAddress = () => {
     if (user?.token) fetchAddress();
   }, [id, user?.token]);
 
-  return isLoading ? (
-    "Loading..."
-  ) : (
+  if (isLoading) return <div>Loading...</div>;
+
+  return (
     <div className="address">
       <div className="address-map">
         <MapComponent
@@ -83,13 +80,13 @@ const EditAddress = () => {
 
       <div className="address-form">
         <h1 id="title">Update Address</h1>
-
         <AddressForm
+          register={register}
           handleSubmit={handleSubmit}
-          myFunc={myFunc}
+          onSubmit={onSubmit}
           errors={errors}
           isSubmitting={isSubmitting}
-          register={register}
+          buttonName="Update Address"
         />
       </div>
     </div>

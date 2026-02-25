@@ -1,4 +1,4 @@
-import React from "react";
+import ImageInput from "../ui/ImageInput";
 import Button from "../ui/Button";
 
 const CategoryForm = ({
@@ -7,19 +7,29 @@ const CategoryForm = ({
   errors,
   isSubmitting,
   register,
-  handleImageChange,
+  setValue,
+  defaultValue,
 }) => {
   return (
-    <form onSubmit={handleSubmit(myFunc)}>
-      <input
-        type="text"
-        placeholder="Enter category name"
-        name="name"
-        {...register("name")}
+    <form onSubmit={handleSubmit(myFunc)} className="form-grid">
+      <div className="form-group full-width">
+        <label>Category Name</label>
+        <input
+          type="text"
+          placeholder="Enter category name"
+          {...register("name")}
+          className={errors.name ? "error-border" : ""}
+        />
+        {errors.name && <span className="error-text">{errors.name.message}</span>}
+      </div>
+
+      <ImageInput
+        name="image"
+        setValue={setValue}
+        error={errors.image}
+        label="Category Image"
+        defaultValue={defaultValue?.image}
       />
-      {errors.name && <span className="error">{errors.name.message}</span>}
-      <input type="file" name="image" id="" onChange={handleImageChange} />
-      {errors.image && <span className="error">{errors.image.message}</span>}
       <Button
         type="main"
         buttonName="add category"

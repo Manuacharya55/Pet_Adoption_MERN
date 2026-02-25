@@ -62,39 +62,49 @@ export const updateAddress = AsyncHandler(async (req, res) => {
     throw ApiError(401, "All fields are required");
   }
 
-  const existingAddress = await Address.findByIdAndUpdate(addressId, {
-    $set: {
-      country: country,
-      state: state,
-      district: district,
-      phonenumber: phonenumber,
-      address: address,
-      lat: lat,
-      lng: lng,
+  const existingAddress = await Address.findOneAndUpdate(
+    { _id: addressId, user: req.user._id },
+    {
+      $set: {
+        country: country,
+        state: state,
+        district: district,
+        phonenumber: phonenumber,
+        address: address,
+        lat: lat,
+        lng: lng,
+      },
     },
-  },{new:true});
+    { new: true }
+  );
 
   if (!existingAddress) {
-    throw new ApiError(400, "No Such Address exists");
+    throw new ApiError(
+      403,
+      "Address not found or you do not have permission to update it"
+    );
   }
 
   res
-    .status(201)
-    .json(new ApiSuccess(201, existingAddress, "Address added successfully"));
+    .status(200)
+    .json(new ApiSuccess(200, existingAddress, "Address updated successfully"));
 });
 
-export const getAddress = AsyncHandler(async(req,res)=>{
-  const {addressId} = req.params;
+export const getAddress = AsyncHandler(async (req, res) => {
+  const { addressId } = req.params;
 
-  if(!addressId){
-    throw new ApiError(401,"No such address")
+  if (!addressId) {
+    throw new ApiError(401, "No such address");
   }
 
-  const address = await Address.findById(addressId);
+  const address = await Address.findOne({ _id: addressId, user: req.user._id });
 
-  if(!address){
-    throw new ApiError(401,"No such address")
+  if (!address) {
+    throw new ApiError(
+      403,
+      "Address not found or you do not have permission to view it"
+    );
   }
 
-  res.status(201).json(new ApiSuccess(201,address,"address fetched successfully"))
+  res.status(201).json(new ApiSuccess(201, address, "address fetched successfully"))
 })

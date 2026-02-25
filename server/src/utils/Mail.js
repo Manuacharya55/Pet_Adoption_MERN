@@ -12,21 +12,36 @@ function buildHtmlForUser(data) {
   `;
 }
 
-export const sendEmail = async (payload) => {
-  const list = Array.isArray(payload) ? payload : [payload];
+// Create transporter lazily and reuse it
+let transporter = null;
 
-  const transporter = nodemailer.createTransport({
+const getTransporter = () => {
+  if (transporter) return transporter;
+
+  transporter = nodemailer.createTransport({
     host: process.env.HOST,
     port: Number(process.env.SMTP_PORT),
-    secure: false,
+    secure: false, // true for 465, false for other ports
     auth: {
       user: process.env.NODEMAILER_USER,
       pass: process.env.NODEMAILER_PASSWORD
-    }
+    },
+    // Adding pooling for better bulk performance
+    pool: true,
+    maxConnections: 5,
+    maxMessages: 100
   });
 
+  return transporter;
+};
+
+export const sendEmail = async (payload) => {
+  const list = Array.isArray(payload) ? payload : [payload];
+  const transporterInstance = getTransporter();
   const results = [];
 
+  // Use Promise.all with a limit or just iterate if number is manageable
+  // For bulk, sequential with reuse is safer for small SMTP limits
   for (const data of list) {
     if (!data.email) {
       results.push({ ok: false, error: "Missing email", data });
@@ -34,24 +49,17 @@ export const sendEmail = async (payload) => {
     }
 
     try {
-      const info = await transporter.sendMail({
+      await transporterInstance.sendMail({
         from: `"${process.env.SENDER_NAME}" <${process.env.NODEMAILER_USER}>`,
         to: data.email,
         subject: "Status Update: Adoption Request",
         html: buildHtmlForUser(data)
       });
 
-      results.push({
-        ok: true,
-        email: data.email,
-        preview: nodemailer.getTestMessageUrl(info)
-      });
+      results.push({ ok: true, email: data.email });
     } catch (err) {
-      results.push({
-        ok: false,
-        email: data.email,
-        error: err.message
-      });
+      console.error(`Failed to send email to ${data.email}:`, err.message);
+      results.push({ ok: false, email: data.email, error: err.message });
     }
   }
 

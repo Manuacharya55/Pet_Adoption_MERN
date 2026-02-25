@@ -5,11 +5,16 @@ import { adminNavbar } from "../Utils/Navbar";
 import { useAuth } from "../Context/AuthContext";
 
 const AdminLayout = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  if (loading) return null;
 
   if (!user) return <Navigate to="/login" replace />;
 
-  if (user.role !== "admin") return <Navigate to="/login" replace />;
+  if (user.role !== "admin") {
+    const redirectPath = user.role === "shopkeeper" ? "/shopkeeper/dashboard" : "/home";
+    return <Navigate to={redirectPath} replace />;
+  }
 
   return (
     <>

@@ -1,17 +1,11 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import Button from "../../Components/ui/Button";
 import { usePost } from "../../hooks/apiRequests";
 import { useAuth } from "../../Context/AuthContext";
 import toast from "react-hot-toast";
-
-const loginSchema = z.object({
-  email: z.string().email("Invalid email format"),
-  password: z.string().min(6, "password must be atleast 6 characters"),
-});
+import { loginSchema } from "../../Schema/AuthSchema";
+import LoginForm from "../../form/LoginForm";
 
 const Login = () => {
   const {
@@ -23,17 +17,23 @@ const Login = () => {
 
   const navigate = useNavigate();
   const { setToken } = useAuth();
-  const myFunc = async (data) => {
+
+  const onSubmit = async (data) => {
     const response = await usePost("/auth/login", "", data);
     if (response?.success) {
       toast.success(response.message);
       setToken(response.data);
-      navigate("/home");
+
+      const { role } = response.data;
+      if (role === "admin") navigate("/admin/dashboard");
+      else if (role === "shopkeeper") navigate("/shopkeeper/dashboard");
+      else navigate("/home");
     } else {
       toast.error(response.message);
       reset();
     }
   };
+
   return (
     <div className="auth">
       <div className="auth-image">
@@ -41,30 +41,13 @@ const Login = () => {
       </div>
       <div className="auth-form">
         <h1 id="title">Sign In</h1>
-        <form onSubmit={handleSubmit(myFunc)}>
-          <input
-            type="text"
-            placeholder="enter your email"
-            {...register("email")}
-          />
-          {errors?.email && (
-            <span className="error">{errors.email.message}</span>
-          )}
-          <input
-            type="text"
-            placeholder="enter your password"
-            {...register("password")}
-          />
-          {errors?.password && (
-            <span className="error">{errors.password.message}</span>
-          )}
-          <Button
-            buttonName="sign in"
-            type="main"
-            isSubmitting={isSubmitting}
-          />
-        </form>
-
+        <LoginForm
+          register={register}
+          handleSubmit={handleSubmit}
+          onSubmit={onSubmit}
+          errors={errors}
+          isSubmitting={isSubmitting}
+        />
         <span>
           don't have an account ? <NavLink to="/register">Sign Up</NavLink>
         </span>

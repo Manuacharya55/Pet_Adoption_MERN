@@ -3,36 +3,50 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({children})=>{
-    const [user,setUser] = useState(null);
+export const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    const setToken = (data) =>{
-        const {role,token} = data;
-        localStorage.setItem("user",JSON.stringify({role,token}))
-    }
+    const setToken = (data) => {
+        const { role, token } = data;
+        const userData = { role, token };
+        localStorage.setItem("user", JSON.stringify(userData));
+        setUser(userData);
+    };
 
-    const getToken = () =>{
-        const user = JSON.parse(localStorage.getItem("user")) || null;
-        setUser(user)
-    }
+    const getToken = () => {
+        try {
+            const storedUser = localStorage.getItem("user");
+            if (storedUser) {
+                setUser(JSON.parse(storedUser));
+            }
+        } catch (error) {
+            console.error("Error parsing user from localStorage", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-    const clearToken = () =>{
-        localStorage.clear("user")
-    }
+    const clearToken = () => {
+        localStorage.removeItem("user");
+        setUser(null);
+    };
 
-    useEffect(()=>{
-        getToken()
-    },[]);
+    useEffect(() => {
+        getToken();
+    }, []);
 
-    return <AuthContext.Provider value={{setToken,user,clearToken}}>
-        {children}
-    </AuthContext.Provider>
-}
+    return (
+        <AuthContext.Provider value={{ setToken, user, clearToken, loading }}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
 
-export const useAuth = () =>{
+export const useAuth = () => {
     const context = useContext(AuthContext);
 
-    if(!context){
+    if (!context) {
         throw new Error("Outside context")
     }
 

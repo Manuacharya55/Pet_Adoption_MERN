@@ -1,19 +1,11 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Button from "../../Components/ui/Button";
 import { usePost } from "../../hooks/apiRequests";
 import toast from "react-hot-toast";
 import { useAuth } from "../../Context/AuthContext";
-
-const registerSchema = z.object({
-  fullname: z.string().min(2, "Name must have atleast 2 characters"),
-  email: z.string().email("Invalid email format"),
-  password: z.string().min(6, "password must be atleast 6 characters"),
-});
-
-const url = `/auth/register`;
+import { registerSchema } from "../../Schema/AuthSchema";
+import RegisterForm from "../../form/RegisterForm";
 
 const Register = () => {
   const { setToken } = useAuth();
@@ -21,13 +13,12 @@ const Register = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
   } = useForm({ resolver: zodResolver(registerSchema) });
 
   const navigate = useNavigate();
 
-  const myFunc = async (data) => {
-    const response = await usePost(url, "", data);
+  const onSubmit = async (data) => {
+    const response = await usePost("/auth/register", "", data);
     if (response.success) {
       toast.success(response.message);
       setToken(response.data);
@@ -44,38 +35,13 @@ const Register = () => {
       </div>
       <div className="auth-form">
         <h1 id="title">Sign Up</h1>
-
-        <form onSubmit={handleSubmit(myFunc)}>
-          <input
-            type="text"
-            placeholder="enter your fullname"
-            {...register("fullname")}
-          />
-          {errors?.fullname && (
-            <span className="error">{errors.fullname.message}</span>
-          )}
-          <input
-            type="text"
-            placeholder="enter your email"
-            {...register("email")}
-          />
-          {errors?.email && (
-            <span className="error">{errors.email.message}</span>
-          )}
-          <input
-            type="text"
-            placeholder="enter your password"
-            {...register("password")}
-          />
-          {errors?.password && (
-            <span className="error">{errors.password.message}</span>
-          )}
-          <Button
-            buttonName="sign up"
-            type="main"
-            isSubmitting={isSubmitting}
-          />
-        </form>
+        <RegisterForm
+          register={register}
+          handleSubmit={handleSubmit}
+          onSubmit={onSubmit}
+          errors={errors}
+          isSubmitting={isSubmitting}
+        />
         <span id="auth-nav">
           already have an account ? <NavLink to="/login">Sign in</NavLink>
         </span>

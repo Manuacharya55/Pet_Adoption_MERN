@@ -34,7 +34,7 @@ export const updateCategory = AsyncHandler(async (req, res) => {
   const { name, image } = req.body;
   const { categoryId } = req.params;
 
-  if ((!name, image)) {
+  if (!name || !image) {
     throw new ApiError(401, "All fields are required");
   }
 

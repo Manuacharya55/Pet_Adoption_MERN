@@ -1,23 +1,4 @@
 /* pets page */
-#filter-holder {
-  width: 100%;
-  background-color: var(--primary-color);
-  padding: 30px;
-  border-radius: 10px;
-
-  display: flex;
-  flex-wrap: wrap;
-  align-items: start;
-  justify-content: center;
-  gap: 20px;
-}
-
-#search-holder {
-  max-width: 350px;
-  display: flex;
-  gap: 10px;
-}
-
 #navigation {
   display: flex;
   padding: 20px 0px;
@@ -91,135 +72,35 @@
 }
 
 /* pet description */
+/* Legacy layout styles removed, now using grid-based system in ui.css */
+
 #pet-description-card,
 #pet-attributes-card,
 #shop-description-card {
   width: 100%;
-  /* border: 1px solid; */
-  padding: 20px;
 }
 
-#pet-description-card {
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: 1fr 2fr;
+#shop-details {
+  border-radius: 16px;
+  overflow: hidden;
 }
 
-#pet-attributes-card{
-    width: 100%;
-    border: 1px solid var(--primary-color);
-    border-radius: 10px;
-    padding: 20px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 80px;
-    flex-wrap: wrap;
-    margin-top: 40px;
+#shop-details img {
+  width: 120px;
+  height: 120px;
+  border-radius: 24px;
+  object-fit: cover;
 }
 
-#pet-image img {
+#shop-map {
   width: 100%;
-  max-width: 400px;
-  border-radius: 10px;
-}
-
-#pet-detail {
-  padding: 0px 40px;
-  grid-column: span(2);
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-#pet-name,
-#pet-price {
-  font-size: 5rem;
-  display: block;
-  font-weight: 600;
- text-transform: capitalize;
-}
-
-#pet-name {
-  line-height: 30px;
-  margin-bottom: 2rem;
-}
-
-#pet-description {
-  line-height: 1.8rem;
-  text-align: justify;
-}
-
-#pet-price {
-  line-height: 70px;
-  margin-top: 1rem;
-}
-
-#detail-header,
-#detail-footer {
-  display: flex;
-  flex-direction: column;
-}
-
-.attribute{
-    color: gray;
-    font-size: 1.2rem;
-    margin-bottom: 6px;
-}
-
-.attribute-value{
-    font-size: 2.5rem;
-    text-transform: capitalize;
-    font-weight: 600;
-}
-
-/* shop detail */
-#shop-description-card{
-    padding: 0;
-    width: 100%;
-    display: grid;
-    gap: 30px;
-    grid-template-columns: 1fr 1fr;
-    margin: 40px 0px;
-}
-
-#shop-details{
-    width: 100%;
-    background-color: var(--primary-color);
-    border-radius: 10px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-
-    padding: 20px 0px;
-    color: white;
-}
-
-#shop-details img{
-    width: 200px;
-    border-radius: 50%;
-}
-
-#shop-details button{
-    background-color: white;
-    max-width: 250px;
-   margin-top: 30px;
-    color: var(--primary-color);
-}
-#shop-map{
-    width: 100%;
-    border-radius: 10px;
-    border-radius: 10px;
-    overflow: hidden;
+  border-radius: 16px;
+  overflow: hidden;
 }
 
 
 /* dashboard */
-#tile-holder{
+#tile-holder {
   margin-top: 30px;
   width: 100%;
   display: flex;
@@ -228,7 +109,7 @@
   flex-wrap: wrap;
 }
 
-#tables-holder{
+#tables-holder {
   margin-top: 30px;
   width: 100%;
   display: grid;
@@ -236,52 +117,56 @@
   grid-template-columns: 1fr 1fr 1fr;
 }
 
-@media(max-width:800px){
-  #tables-holder{
+@media(max-width:800px) {
+  #tables-holder {
     grid-template-columns: 1fr 1fr;
   }
 }
 
-@media(max-width:650px){
-  #tables-holder{
+@media(max-width:650px) {
+  #tables-holder {
     grid-template-columns: 1fr;
   }
 
-  #pet-detail{
+  #pet-detail {
     border-radius: 8px;
     padding: 20px 10px;
     margin-top: 30px;
     border: 1px solid var(--primary-color);
   }
-   #pet-description-card,#shop-description-card{
+
+  #pet-description-card,
+  #shop-description-card {
     display: flex;
     flex-direction: column;
     padding: 0;
-   }
+  }
 
-   #pet-name,#pet-price{
+  #pet-name,
+  #pet-price {
     font-size: 3.5rem;
     text-align: center;
-   }  
+  }
 
-   #pet-description,#category{
+  #pet-description,
+  #category {
     text-align: center;
-   }
+  }
 
-   #shop-map{
+  #shop-map {
     height: 350px;
-   }
+  }
 
-   #pet-attributes-card{
+  #pet-attributes-card {
     gap: 20px;
-   }
+  }
 
-   .attributes{
+  .attributes {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-   }
+  }
 }

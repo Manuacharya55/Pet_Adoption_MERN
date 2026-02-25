@@ -21,14 +21,16 @@ const Wishlist = () => {
     setIsLoading(true);
     if (!user?.token) return;
     const response = await useGet(url, user?.token);
+    console.log(response)
     setPets(response.data);
     setIsLoading(false);
   };
 
   const removePets = async(id)=>{
     if(!user?.token) return
-
+    console.log(id)
     const response = await useDelete(url+id,user?.token);
+    console.log(response)
     if(response.success){
         toast.success(response.message)
         setPets(prev => prev.filter(pet => pet?.pet?._id !== id));

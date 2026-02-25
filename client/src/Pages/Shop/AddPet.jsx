@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import NavBar from "../../Components/NavBar";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { petSchema } from "../../Utils/ZodForm";
 import { useGet, usePost } from "../../hooks/apiRequests";
 import { useAuth } from "../../Context/AuthContext";
 import toast from "react-hot-toast";
-import PetForm from "../../Components/Forms/PetForm";
+import { petSchema } from "../../Schema/PetSchema";
+import PetForm from "../../form/PetForm";
 
 const AddPet = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -19,15 +18,15 @@ const AddPet = () => {
     formState: { errors, isSubmitting },
     setValue,
     reset,
+    watch,
   } = useForm({ resolver: zodResolver(petSchema) });
 
   const navigate = useNavigate();
   const { user } = useAuth();
-  const url = `/category/`;
 
   const fetchCategories = async () => {
     if (!user?.token) return;
-    const response = await useGet(url, user?.token);
+    const response = await useGet("/category/", user?.token);
     setCategories(response.data);
     setIsLoading(false);
   };
@@ -36,7 +35,7 @@ const AddPet = () => {
     if (user?.token) fetchCategories();
   }, [user?.token]);
 
-  const myFunc = async (data) => {
+  const onSubmit = async (data) => {
     if (!user?.token) return;
     const response = await usePost("/pet", user?.token, data);
     if (response.success) {
@@ -47,30 +46,29 @@ const AddPet = () => {
     }
   };
 
-  return isLoading ? (
-    "Loading..."
-  ) : (
-    <>
-      <div id="container">
-        <div id="navigation">
-          <button onClick={() => navigate(-1)}>back</button>
-        </div>
+  if (isLoading) return <div>Loading...</div>;
 
-        <h1 id="heading">Add Pet</h1>
-        <div id="form-holder">
-          <PetForm
-            handleSubmit={handleSubmit}
-            myFunc={myFunc}
-            errors={errors}
-            isSubmitting={isSubmitting}
-            register={register}
-            setValue={setValue}
-            categories={categories}
-            buttonName="add pet"
-          />
-        </div>
+  return (
+    <div id="container">
+      <div id="navigation">
+        <button onClick={() => navigate(-1)}>back</button>
       </div>
-    </>
+
+      <h1 id="heading">Add Pet</h1>
+      <div id="form-holder">
+        <PetForm
+          register={register}
+          handleSubmit={handleSubmit}
+          onSubmit={onSubmit}
+          errors={errors}
+          isSubmitting={isSubmitting}
+          setValue={setValue}
+          watch={watch}
+          categories={categories}
+          buttonName="add pet"
+        />
+      </div>
+    </div>
   );
 };
 

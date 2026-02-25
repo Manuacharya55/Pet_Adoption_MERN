@@ -9,8 +9,6 @@ import Wishlist from "./Pages/User/Wishlist";
 import ProfilePage from "./Pages/Shared/ProfilePage";
 import Pets from "./Pages/Shop/Pets";
 import AllPets from "./Pages/Admin/Pets";
-import AddPet from "./Pages/Shop/AddPet";
-import EditPet from "./Pages/Shop/EditPet";
 import EditProfile from "./Pages/Shared/EditProfile";
 import EditAddress from "./Pages/Shared/EditAddress";
 import BecomeShopKeeper from "./Pages/User/BecomeShopKeeper";
@@ -25,16 +23,62 @@ import PetDescription from "./Pages/User/PetDescription";
 import UserLayout from "./Layouts/UserLayout";
 import ShopKeeperLayout from "./Layouts/ShopKeeperLayout";
 import AdminLayout from "./Layouts/AdminLayout";
+import SharedLayout from "./Layouts/SharedLayout";
 import AdoptionRequestDetails from "./Pages/Shop/AdoptionRequestDetails";
 import History from "./Pages/Shop/History";
+
+import { Navigate } from "react-router-dom";
+import { useAuth } from "./Context/AuthContext";
+
+const AuthRouteRedirect = ({ children }) => {
+  const { user, loading } = useAuth();
+  if (loading) return null;
+  if (user) {
+    const paths = {
+      admin: "/admin/dashboard",
+      shopkeeper: "/shopkeeper/dashboard",
+      user: "/home",
+    };
+    return <Navigate to={paths[user.role] || "/home"} replace />;
+  }
+  return children;
+};
+
+const ProtectedRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+  if (loading) return null;
+  if (!user) return <Navigate to="/login" replace />;
+  return children;
+};
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/"
+          element={
+            <AuthRouteRedirect>
+              <Navigate to="/login" />
+            </AuthRouteRedirect>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <AuthRouteRedirect>
+              <Login />
+            </AuthRouteRedirect>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <AuthRouteRedirect>
+              <Register />
+            </AuthRouteRedirect>
+          }
+        />
 
         <Route element={<UserLayout />}>
           <Route path="/home" element={<HomePage />} />
@@ -46,19 +90,23 @@ function App() {
           <Route path="/become-shopkeeper" element={<BecomeShopKeeper />} />
         </Route>
 
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/profile/:id" element={<EditProfile />} />
-        <Route path="/add-address" element={<Address />} />
-        <Route path="/address/:id" element={<EditAddress />} />
+        {/* Protected Shared Routes */}
+        <Route element={<SharedLayout />}>
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile/:id" element={<EditProfile />} />
+          <Route path="/add-address" element={<Address />} />
+          <Route path="/address/:id" element={<EditAddress />} />
+        </Route>
 
         {/* shopkeeper routes */}
         <Route element={<ShopKeeperLayout />}>
           <Route path="/shopkeeper/dashboard" element={<Dashboard />} />
           <Route path="/shopkeeper/pets" element={<Pets />} />
           <Route path="/shopkeeper/request" element={<Requests />} />
-          <Route path="/shopkeeper/request/:id" element={<AdoptionRequestDetails />} />
-          <Route path="/shopkeeper/addpet" element={<AddPet />} />
-          <Route path="/shopkeeper/editpet/:id" element={<EditPet />} />
+          <Route
+            path="/shopkeeper/request/:id"
+            element={<AdoptionRequestDetails />}
+          />
           <Route path="/shopkeeper/history" element={<History />} />
         </Route>
 

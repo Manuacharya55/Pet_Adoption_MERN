@@ -1,5 +1,5 @@
 import express from "express";
-import { verifyJWT } from "../middleware/Auth.middleware.js";
+import { verifyJWT, verifyAdmin } from "../middleware/Auth.middleware.js";
 import {
   addCategory,
   deactivateCategory,
@@ -10,8 +10,8 @@ import {
 const router = express.Router();
 
 router.get("/", verifyJWT, getCategories);
-router.post("/", verifyJWT, addCategory);
-router.patch("/:categoryId", verifyJWT, updateCategory);
-router.delete("/:categoryId", verifyJWT, deactivateCategory);
+router.post("/", verifyJWT, verifyAdmin, addCategory);
+router.patch("/:categoryId", verifyJWT, verifyAdmin, updateCategory);
+router.delete("/:categoryId", verifyJWT, verifyAdmin, deactivateCategory);
 
 export default router;
