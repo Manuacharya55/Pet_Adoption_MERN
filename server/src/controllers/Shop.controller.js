@@ -104,3 +104,27 @@ export const getSingleShop = AsyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiSuccess(200, data, "shop details fetched successfully"));
 });
+
+export const updateShop = AsyncHandler(async (req, res) => {
+  const { shopId } = req.params;
+  const { shopname, image } = req.body;
+  const { _id } = req.user;
+
+  const updates = {};
+  if (shopname) updates.shopname = shopname;
+  if (image) updates.image = image;
+
+  const shop = await Shop.findOneAndUpdate(
+    { _id: shopId, user: _id },
+    { $set: updates },
+    { new: true }
+  );
+
+  if (!shop) {
+    throw new ApiError(404, "Shop not found or you do not have permission");
+  }
+
+  res
+    .status(200)
+    .json(new ApiSuccess(200, shop, "Shop updated successfully"));
+});

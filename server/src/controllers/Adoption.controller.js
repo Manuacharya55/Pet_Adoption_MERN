@@ -11,6 +11,10 @@ export const addAdoption = AsyncHandler(async (req, res) => {
   const { _id } = req.user;
   const { shop: shopId, pet: petId } = req.body;
 
+  if (!shopId || !petId) {
+    throw new ApiError(400, "Shop and Pet IDs are required");
+  }
+
   const existingRequest = await Adoption.findOne({
     user: _id,
     pet: petId,

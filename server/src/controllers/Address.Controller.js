@@ -50,30 +50,19 @@ export const updateAddress = AsyncHandler(async (req, res) => {
   const { country, state, district, phonenumber, address, lat, lng } = req.body;
   const { addressId } = req.params;
 
-  if (
-    !country ||
-    !state ||
-    !district ||
-    !phonenumber ||
-    !address ||
-    !lat ||
-    !lng
-  ) {
-    throw ApiError(401, "All fields are required");
-  }
+  const updates = {};
+  if (country) updates.country = country;
+  if (state) updates.state = state;
+  if (district) updates.district = district;
+  if (phonenumber) updates.phonenumber = phonenumber;
+  if (address) updates.address = address;
+  if (lat) updates.lat = lat;
+  if (lng) updates.lng = lng;
 
   const existingAddress = await Address.findOneAndUpdate(
     { _id: addressId, user: req.user._id },
     {
-      $set: {
-        country: country,
-        state: state,
-        district: district,
-        phonenumber: phonenumber,
-        address: address,
-        lat: lat,
-        lng: lng,
-      },
+      $set: updates,
     },
     { new: true }
   );
