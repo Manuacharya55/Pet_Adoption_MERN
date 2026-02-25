@@ -127,52 +127,42 @@ export const updatePet = AsyncHandler(async (req, res) => {
     req.body;
   const { _id, shop } = req.user;
   const { petId } = req.params;
-  console.log("===============================================================")
-  console.log({ name, description, image, breed, age, gender, category, price })
-  console.log("===============================================================")
-  if (
-    !name ||
-    !description ||
-    !image ||
-    !breed ||
-    !age ||
-    !gender ||
-    !category ||
-    !price
-  ) {
-    throw new ApiError(401, "All fields are required");
-  }
-
-  const existingCategory = await Category.findById(category);
-  if (!existingCategory) {
-    throw new ApiError(401, "No Such category exists");
-  }
 
   const existingShop = await Shop.findOne({ _id: shop, user: _id });
   if (!existingShop) {
     throw new ApiError(401, "No Such shop exists");
   }
 
+  if (category) {
+    const existingCategory = await Category.findById(category);
+    if (!existingCategory) {
+      throw new ApiError(401, "No Such category exists");
+    }
+  }
+
+  const updates = {};
+  if (name) updates.name = name;
+  if (description) updates.description = description;
+  if (image) updates.image = image;
+  if (breed) updates.breed = breed;
+  if (age) updates.age = age;
+  if (gender) updates.gender = gender;
+  if (category) updates.category = category;
+  if (price) updates.price = price;
+
   const pet = await Pets.findOneAndUpdate(
     { _id: petId, shop: shop },
     {
-      $set: {
-        name,
-        description,
-        image,
-        breed,
-        age,
-        gender,
-        category,
-        shop,
-        price,
-      },
+      $set: updates,
     },
     { new: true }
   );
 
   if (!pet) {
-    throw new ApiError(403, "Pet not found or you do not have permission to update it");
+    throw new ApiError(
+      403,
+      "Pet not found or you do not have permission to update it"
+    );
   }
 
   res.status(201).json(new ApiSuccess(201, pet, "Pet updated successfully"));
