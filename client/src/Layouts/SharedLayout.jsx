@@ -20,11 +20,20 @@ const SharedLayout = () => {
     const currentNavbar = navbars[user.role] || userNavbar;
 
     return (
-        <>
+        <div style={{
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            background: 'var(--bg-primary)',
+            color: 'var(--text-primary)',
+            overflowX: 'hidden',
+        }}>
             <NavBar array={currentNavbar} />
-            <Outlet />
+            <main style={{ flex: 1 }}>
+                <Outlet />
+            </main>
             <Footer array={currentNavbar} />
-        </>
+        </div>
     );
 };
 

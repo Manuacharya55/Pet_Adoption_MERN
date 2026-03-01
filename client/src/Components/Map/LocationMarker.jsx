@@ -1,38 +1,45 @@
-import axios from "axios";
-import React from "react";
-import { Marker, Popup, useMapEvents } from "react-leaflet";
+import { useState } from "react";
+import { Marker, useMapEvents } from "react-leaflet";
+import L from "leaflet";
+import markerIconPng from "leaflet/dist/images/marker-icon.png";
+import markerShadowPng from "leaflet/dist/images/marker-shadow.png";
 
-const fetchLocationDetail = async (lat, lng) => {
-  try {
-    const apiKey = import.meta.env.VITE_OPEN_CAGE_DATA_API_KEY;
-    const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lng}&key=${apiKey}`;
-    const response = await axios.get(url);
-    return response.data.results[0].components;
-  } catch (error) {
-    throw error
-  }
-};
+// Fix Leaflet marker icon issue
+const markerIcon = new L.Icon({
+  iconUrl: markerIconPng,
+  shadowUrl: markerShadowPng,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+});
 
 const LocationMarker = ({ location, setLocation, setValue }) => {
+  const [markerPosition, setMarkerPosition] = useState(location);
+
   useMapEvents({
     click: async (e) => {
       const { lat, lng } = e.latlng;
+      setMarkerPosition([lat, lng]);
       setLocation([lat, lng]);
-      const { country, state, state_district, town } =
-        await fetchLocationDetail(lat, lng);
 
-      setValue("country",country,{ shouldValidate: true })
-      setValue("state",state,{ shouldValidate: true })
-      setValue("district",state_district,{ shouldValidate: true })
-      // setValue("town",town,{ shouldValidate: true })
+      // Reverse geocode using Nominatim (free, no API key needed)
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+        );
+        const data = await response.json();
+
+        setValue("country", data.address?.country || "", { shouldValidate: true });
+        setValue("state", data.address?.state || "", { shouldValidate: true });
+        setValue("district", data.address?.state_district || "", { shouldValidate: true });
+      } catch (error) {
+        console.error("Error fetching location data", error);
+      }
     },
   });
 
-  return location === null ? null : (
-    <Marker position={location}>
-      <Popup>You are here</Popup>
-    </Marker>
-  );
+  return markerPosition ? (
+    <Marker position={markerPosition} icon={markerIcon} />
+  ) : null;
 };
 
 export default LocationMarker;

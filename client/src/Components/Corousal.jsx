@@ -1,6 +1,6 @@
-import React, { useEffect, useCallback } from 'react'
-import useEmblaCarousel from 'embla-carousel-react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect } from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
+import { useNavigate } from 'react-router-dom';
 
 const Corousal = ({ categories = [] }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -8,10 +8,9 @@ const Corousal = ({ categories = [] }) => {
     align: 'start',
     slidesToScroll: 1,
     containScroll: 'trimSnaps'
-  })
+  });
   const navigate = useNavigate();
 
-  // Manual Autoplay Implementation
   useEffect(() => {
     if (!emblaApi) return;
     const intervalId = setInterval(() => {
@@ -21,25 +20,33 @@ const Corousal = ({ categories = [] }) => {
   }, [emblaApi]);
 
   return (
-    <div className="embla" ref={emblaRef}>
-      <div className="embla__container">
+    <div style={{ overflow: 'hidden', padding: 'var(--space-md) 0' }} ref={emblaRef}>
+      <div style={{ display: 'flex', touchAction: 'pan-y' }}>
         {categories.map((cat) => (
           <div
-            className="embla__slide"
+            style={{ flex: '0 0 auto', minWidth: '0', paddingLeft: 'var(--space-md)', width: '280px', cursor: 'pointer' }}
             key={cat._id}
             onClick={() => navigate(`/pets?category=${cat._id}`)}
           >
-            <div className="category-slide-card">
-              <img src={cat.image} alt={cat.name} />
-              <div className="category-overlay">
-                <span>{cat.name}</span>
+            <div className="glass-panel" style={{ height: '350px', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              <div style={{ flex: 1, width: '100%', overflow: 'hidden' }}>
+                <img
+                  src={cat.image}
+                  alt={cat.name}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform var(--transition-slow)' }}
+                  onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+                  onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                />
+              </div>
+              <div style={{ padding: 'var(--space-md)', background: 'var(--bg-card)', textAlign: 'center' }}>
+                <span style={{ fontSize: '1.2rem', fontWeight: '600', color: 'var(--text-primary)' }}>{cat.name}</span>
               </div>
             </div>
           </div>
         ))}
       </div>
     </div>
-  )
+  );
 }
 
-export default Corousal
+export default Corousal;

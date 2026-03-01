@@ -17,11 +17,20 @@ const UserLayout = () => {
   }
 
   return (
-    <>
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      background: 'var(--bg-primary)',
+      color: 'var(--text-primary)',
+      overflowX: 'hidden',
+    }}>
       <NavBar array={userNavbar} />
-      <Outlet />
+      <main style={{ flex: 1 }}>
+        <Outlet />
+      </main>
       <Footer array={userNavbar} />
-    </>
+    </div>
   );
 };
 

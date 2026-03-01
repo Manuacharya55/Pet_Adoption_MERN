@@ -17,11 +17,20 @@ const AdminLayout = () => {
   }
 
   return (
-    <>
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      background: 'var(--bg-primary)',
+      color: 'var(--text-primary)',
+      overflowX: 'hidden',
+    }}>
       <NavBar array={adminNavbar} />
-      <Outlet />
+      <main style={{ flex: 1 }}>
+        <Outlet />
+      </main>
       <Footer array={adminNavbar} />
-    </>
+    </div>
   );
 };
 

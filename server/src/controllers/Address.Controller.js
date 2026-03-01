@@ -17,7 +17,7 @@ export const addAddress = AsyncHandler(async (req, res) => {
     !lat ||
     !lng
   ) {
-    throw ApiError(401, "All fields are required");
+    throw new ApiError(401, "All fields are required");
   }
 
   const existingAddress = await Address.findOne({ user: _id });

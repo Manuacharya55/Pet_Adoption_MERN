@@ -34,6 +34,10 @@ const AuthRouteRedirect = ({ children }) => {
   const { user, loading } = useAuth();
   if (loading) return null;
   if (user) {
+    if (sessionStorage.getItem("justRegistered") === "true") {
+      sessionStorage.removeItem("justRegistered");
+      return <Navigate to="/add-address" replace />;
+    }
     const paths = {
       admin: "/admin/dashboard",
       shopkeeper: "/shopkeeper/dashboard",

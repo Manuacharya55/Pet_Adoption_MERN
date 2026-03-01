@@ -43,6 +43,7 @@ const Pets = () => {
     setIsLoading(true);
     if (!user?.token) return;
     const response = await useGet(url, user?.token);
+    console.log(response)
     if (response.success) {
       setPets(response.data);
     }

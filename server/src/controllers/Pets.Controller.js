@@ -41,7 +41,6 @@ export const getPet = AsyncHandler(async (req, res) => {
 export const getMyPet = AsyncHandler(async (req, res) => {
   const { shop } = req.user;
   const pets = await Pets.find({ shop: shop, isActive: true, isAdopted: false })
-    .select("category price image name")
     .populate("category");
   res.status(200).json(new ApiSuccess(200, pets, "Data fetched successfully"));
 });

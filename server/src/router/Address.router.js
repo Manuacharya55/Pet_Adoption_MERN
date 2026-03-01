@@ -1,5 +1,5 @@
 import express from "express"
-import { addAddress, getAddress, updateAddress } from "../controllers/Address.controller.js";
+import { addAddress, getAddress, updateAddress } from "../controllers/Address.Controller.js";
 import { verifyJWT } from "../middleware/Auth.middleware.js";
 
 
