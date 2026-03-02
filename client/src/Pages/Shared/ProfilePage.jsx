@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
-import NavBar from "../../Components/NavBar";
-import Footer from "../../Components/Footer";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import { useGet } from "../../hooks/apiRequests";
 import toast from "react-hot-toast";
 
 const ProfilePage = () => {
-  console.log("ProfilePage Component Rendered (New Version)");
   const url = `/auth/profile`;
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);

@@ -79,7 +79,6 @@ export const addPet = AsyncHandler(async (req, res) => {
     req.body;
   const { _id, shop } = req.user;
 
-  console.log({ name, description, image, breed, age, gender, category, price })
   if (
     !name ||
     !description ||

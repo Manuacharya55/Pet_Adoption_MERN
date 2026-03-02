@@ -6,14 +6,8 @@ import connectDB from "./db/index.js"
 connectDB();
 const app = express();
 
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 dotenv.config({
-    path: path.join(__dirname, "../.env")
+    path:"../.env"
 });
 
 app.use(cors())
@@ -39,15 +33,15 @@ import statsRouter from "./router/Stats.router.js"
 
 import { GlobalErrorHandler } from "./utils/GlobalError.js";
 
-app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/address", addressRouter);
-app.use("/api/v1/shop", shopRouter);
-app.use("/api/v1/category", categoryRouter);
-app.use("/api/v1/pet", petRouter);
-app.use("/api/v1/admin", adminRouter);
-app.use("/api/v1/dashboard", dashboardRouter);
-app.use("/api/v1/adoption", adoptionRouter);
-app.use("/api/v1/stats", statsRouter);
+app.use("/api/v2/auth", authRouter);
+app.use("/api/v2/address", addressRouter);
+app.use("/api/v2/shop", shopRouter);
+app.use("/api/v2/category", categoryRouter);
+app.use("/api/v2/pet", petRouter);
+app.use("/api/v2/admin", adminRouter);
+app.use("/api/v2/dashboard", dashboardRouter);
+app.use("/api/v2/adoption", adoptionRouter);
+app.use("/api/v2/stats", statsRouter);
 
 
 app.use(GlobalErrorHandler)
