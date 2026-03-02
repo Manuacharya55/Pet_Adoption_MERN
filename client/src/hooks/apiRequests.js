@@ -1,7 +1,7 @@
 import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
 
-axios.defaults.baseURL = `http://localhost:3000/api/v2`;
+
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
 export const usePost = async (url, token = "", data) => {
   try {
