@@ -8,6 +8,7 @@ import Table from "../../Components/shared/Table";
 import { userHeader, userKey } from "../../Utils/Table";
 
 import Modal from "../../Components/ui/Modal";
+import Loader from "../../Components/Loader";
 
 const Users = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -72,7 +73,7 @@ const Users = () => {
   };
 
   return isLoading ? (
-    <div className="loading-container">Loading...</div>
+    <Loader text="Loading users..." />
   ) : (
     <>
       <div id="container">

@@ -5,7 +5,7 @@ import { useAuth } from "../../Context/AuthContext";
 import { useGet } from "../../hooks/apiRequests";
 import Table from "../../Components/shared/Table";
 import { petsHeader, petsKey } from "../../Utils/Table";
-
+import Loader from "../../Components/Loader";
 import Modal from "../../Components/ui/Modal";
 
 const Pets = () => {
@@ -74,7 +74,7 @@ const Pets = () => {
   };
 
   return isLoading ? (
-    <div className="loading-container">Loading...</div>
+    <Loader text="Loading pets..." />
   ) : (
     <>
       <div id="container">

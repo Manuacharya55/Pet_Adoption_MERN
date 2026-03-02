@@ -8,6 +8,7 @@ import { shopsHeader, shopsKey } from "../../Utils/Table";
 import { useGet } from "../../hooks/apiRequests";
 
 import Modal from "../../Components/ui/Modal";
+import Loader from "../../Components/Loader";
 
 const Shops = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -70,7 +71,7 @@ const Shops = () => {
   };
 
   return isLoading ? (
-    <div className="loading-container">Loading...</div>
+    <Loader text="Loading shops..." />
   ) : (
     <>
       <div id="container">

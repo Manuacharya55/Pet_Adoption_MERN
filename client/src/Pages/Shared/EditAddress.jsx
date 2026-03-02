@@ -8,6 +8,7 @@ import { useGet, usePatch } from "../../hooks/apiRequests";
 import toast from "react-hot-toast";
 import { addressSchema } from "../../Schema/AddressSchema";
 import AddressForm from "../../form/AddressForm";
+import Loader from "../../Components/Loader";
 
 const EditAddress = () => {
   const { id } = useParams();
@@ -66,7 +67,7 @@ const EditAddress = () => {
     if (user?.token) fetchAddress();
   }, [id, user?.token]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loader text="Loading address..." />;
 
   return (
     <div className="address">

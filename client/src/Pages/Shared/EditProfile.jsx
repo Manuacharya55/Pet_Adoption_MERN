@@ -9,6 +9,7 @@ import { profileSchema } from "../../Schema/ProfileSchema";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import ImageInput from "../../Components/ui/ImageInput";
+import Loader from "../../Components/Loader";
 
 const EditProfile = () => {
   const url = `/auth/profile`;
@@ -63,7 +64,7 @@ const EditProfile = () => {
         </div>
         <h1 id="heading">Edit Profile</h1>
         {isLoading ? (
-          "Loading..."
+          <Loader text="Loading profile..." />
         ) : (
           <form onSubmit={handleSubmit(myFunc)} className="form-grid" style={{ maxWidth: '600px', margin: '0 auto' }}>
             <ImageInput

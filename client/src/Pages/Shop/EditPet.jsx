@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { petSchema } from "../../Schema/PetSchema";
 import toast from "react-hot-toast";
 import PetForm from "../../form/PetForm";
+import Loader from "../../Components/Loader";
 
 const EditPet = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -59,7 +60,7 @@ const EditPet = () => {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loader text="Loading pet..." />;
 
   return (
     <div id="container">

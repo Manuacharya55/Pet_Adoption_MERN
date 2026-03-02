@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import { useGet } from "../../hooks/apiRequests";
 import toast from "react-hot-toast";
+import Loader from "../../Components/Loader";
 
 const ProfilePage = () => {
   const url = `/auth/profile`;
@@ -29,7 +30,7 @@ const ProfilePage = () => {
   }, [user?.token]);
 
   return isLoading ? (
-    <div className="loading-container">Loading...</div>
+    <Loader text="Loading profile..." />
   ) : (
     <div id="container">
       <h1 id="heading">My Profile</h1>

@@ -7,6 +7,7 @@ import { useAuth } from "../../Context/AuthContext";
 import toast from "react-hot-toast";
 import { petSchema } from "../../Schema/PetSchema";
 import PetForm from "../../form/PetForm";
+import Loader from "../../Components/Loader";
 
 const AddPet = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -46,7 +47,7 @@ const AddPet = () => {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loader text="Loading add pet..." />;
 
   return (
     <div id="container">

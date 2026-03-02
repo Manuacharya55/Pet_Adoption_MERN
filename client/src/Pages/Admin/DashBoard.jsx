@@ -3,6 +3,7 @@ import NavBar from "../../Components/NavBar";
 import { useGet } from "../../hooks/apiRequests";
 import { useAuth } from "../../Context/AuthContext";
 import Tile from "../../Components/Tile";
+import Loader from "../../Components/Loader";
 
 const DashBoard = () => {
   const url = `dashboard/admin`;
@@ -24,7 +25,7 @@ const DashBoard = () => {
   }, [user?.token]);
 
   return isLoading ? (
-    "Loading..."
+    <Loader text="Loading dashboard..." />
   ) : (
     <>
 
