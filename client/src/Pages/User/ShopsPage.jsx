@@ -1,5 +1,6 @@
 import React from "react";
 import Card from "../../Components/Card";
+import Loader from "../../Components/Loader";
 import { FiSearch } from "react-icons/fi";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -118,10 +119,7 @@ const ShopsPage = () => {
 
       {/* Shops Grid */}
       {isLoading ? (
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <span>Loading shops...</span>
-        </div>
+        <Loader text="Loading shops..." />
       ) : (
         <div className="card-grid">
           {shops?.shops?.length === 0 ? (

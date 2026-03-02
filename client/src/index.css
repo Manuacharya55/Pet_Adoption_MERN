@@ -345,7 +345,40 @@ img {
   margin-top: var(--space-xs);
 }
 
-/* ─── Loading Spinner ──────────────────────── */
+/* ─── Loader Component ─────────────────────── */
+.loader-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  width: 100%;
+}
+
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.loader-paw-track {
+  display: flex;
+  gap: 12px;
+}
+
+.loader-paw {
+  font-size: 1.8rem;
+  filter: grayscale(0.3);
+}
+
+.loader-text {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* Legacy loading-spinner (kept for compatibility) */
 .loading-spinner {
   display: flex;
   flex-direction: column;
@@ -374,6 +407,7 @@ img {
     transform: rotate(360deg);
   }
 }
+
 
 /* ─── Empty State ──────────────────────────── */
 .empty-state {

@@ -1,5 +1,6 @@
 import React from "react";
 import Card from "../../Components/Card";
+import Loader from "../../Components/Loader";
 import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext";
 import { useDelete, useGet } from "../../hooks/apiRequests";
@@ -68,10 +69,7 @@ const Wishlist = () => {
       </div>
 
       {isLoading ? (
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <span>Loading wishlist...</span>
-        </div>
+        <Loader text="Loading wishlist..." />
       ) : pets?.length === 0 || !pets ? (
         <div style={{
           textAlign: 'center',

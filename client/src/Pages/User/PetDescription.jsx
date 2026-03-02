@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { useAuth } from "../../Context/AuthContext";
 import { useGet, usePost } from "../../hooks/apiRequests";
+import Loader from "../../Components/Loader";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 
@@ -51,12 +52,7 @@ const PetDescription = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="loading-spinner" style={{ minHeight: '100vh' }}>
-        <div className="spinner"></div>
-        <span>Loading pet details...</span>
-      </div>
-    );
+    return <Loader text="Loading pet details..." fullScreen />;
   }
 
   return (

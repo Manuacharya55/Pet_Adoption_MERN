@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import Card from "../../Components/Card";
+import Loader from "../../Components/Loader";
 import { useAuth } from "../../Context/AuthContext";
 import { useGet } from "../../hooks/apiRequests";
 
@@ -34,12 +35,7 @@ const ShopDescription = () => {
   }, [user?.token, page]);
 
   if (isLoading) {
-    return (
-      <div className="loading-spinner" style={{ minHeight: '100vh' }}>
-        <div className="spinner"></div>
-        <span>Loading shop and pets...</span>
-      </div>
-    );
+    return <Loader text="Loading shop and pets..." fullScreen />;
   }
 
   return (

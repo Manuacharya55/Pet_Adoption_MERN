@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Tile from "../../Components/Tile";
 import CategoryFan from "../../Components/CategoryFan";
+import Loader from "../../Components/Loader";
 import { useGet } from "../../hooks/apiRequests";
 import { useAuth } from "../../Context/AuthContext";
 import { motion } from "framer-motion";
@@ -242,10 +243,7 @@ const HomePage = () => {
         </div>
 
         {isLoading ? (
-          <div className="loading-spinner">
-            <div className="spinner"></div>
-            <span>Loading categories...</span>
-          </div>
+          <Loader text="Loading categories..." />
         ) : (
           <CategoryFan categories={categories} />
         )}

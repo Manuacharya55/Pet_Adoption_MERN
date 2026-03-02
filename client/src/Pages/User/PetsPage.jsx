@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Card from "../../Components/Card";
+import Loader from "../../Components/Loader";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import { useGet, usePost } from "../../hooks/apiRequests";
@@ -156,10 +157,7 @@ const PetsPage = () => {
 
       {/* Pet Grid */}
       {isLoading ? (
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <span>Loading pets...</span>
-        </div>
+        <Loader text="Loading pets..." />
       ) : (
         <div className="card-grid">
           {pets?.pet?.length === 0 ? (

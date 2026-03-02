@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Card from "../../Components/Card";
+import Loader from "../../Components/Loader";
 import { useAuth } from "../../Context/AuthContext";
 import { useGet, usePost, usePatch } from "../../hooks/apiRequests";
 import { categorySchema } from "../../Utils/ZodForm";
@@ -95,7 +96,7 @@ const Categories = () => {
   };
 
   return isLoading ? (
-    <div className="loading-container">Loading...</div>
+    <Loader text="Loading categories..." />
   ) : (
     <div id="container">
       <div className="header-with-action">

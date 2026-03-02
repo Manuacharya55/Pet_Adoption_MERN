@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Card from "../../Components/Card";
+import Loader from "../../Components/Loader";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import { useDelete, useGet, usePost, usePatch } from "../../hooks/apiRequests";
@@ -116,7 +117,7 @@ const Pets = () => {
   };
 
   return isLoading ? (
-    "Loading..."
+    <Loader text="Loading pets..." />
   ) : (
     <>
       <div id="container">

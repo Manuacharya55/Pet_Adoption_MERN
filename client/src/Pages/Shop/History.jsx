@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useGet } from "../../hooks/apiRequests";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import Table from "../../Components/shared/Table";
+import Loader from "../../Components/Loader";
 import { historyHeader, historyKey } from "../../Utils/Table";
 import { useSearchParams } from "react-router-dom";
 
@@ -72,7 +73,7 @@ const History = () => {
   };
 
   return isLoading ? (
-    "Loading..."
+    <Loader text="Loading history..." />
   ) : (
     <div id="container">
       <h1 id="heading">History</h1>

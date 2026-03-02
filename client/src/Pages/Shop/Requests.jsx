@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Card from "../../Components/Card";
+import Loader from "../../Components/Loader";
 import { useNavigate } from "react-router-dom";
 
 const Requests = () => {
@@ -31,7 +32,7 @@ const Requests = () => {
     }
   }, [user?.token]);
   return isLoading ? (
-    <div className="loading-state">Loading adoption requests...</div>
+    <Loader text="Loading adoption requests..." />
   ) : (
     <div id="container">
       <h1 id="heading">Adoption Requests</h1>

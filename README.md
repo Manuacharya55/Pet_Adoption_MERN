@@ -25,7 +25,7 @@
 
 ## 🔗 Live Demo
 
-> 🚧 _Demo link coming soon…_
+> [![Live Demo](https://img.shields.io/badge/Live-Demo-green)](https://pet-adoption-mern-rouge.vercel.app/)
 >
 > <!-- Replace with your deployed URL -->
 > <!-- [▶️ View Live Demo](https://your-demo-link.com) -->
