@@ -5,8 +5,8 @@
 <h1 align="center">🐾 Happy Paws — Pet Adoption Platform</h1>
 
 <p align="center">
-  A full-stack MERN application that connects pet lovers with adoption shops,<br/>
-  making the journey of finding a furry companion seamless and delightful.
+  <strong>A full-stack MERN application that connects pet lovers with adoption shops,<br/>
+  making the journey of finding a furry companion seamless and delightful.</strong>
 </p>
 
 <p align="center">
@@ -21,58 +21,168 @@
   <img src="https://img.shields.io/badge/Vite-7-646CFF?logo=vite&logoColor=white" alt="Vite"/>
 </p>
 
----
-
-## 🔗 Live Demo
-
-> [![Live Demo](https://img.shields.io/badge/Live-Demo-green)](https://pet-adoption-mern-rouge.vercel.app/)
->
-> <!-- Replace with your deployed URL -->
-> <!-- [▶️ View Live Demo](https://your-demo-link.com) -->
+<p align="center">
+  <a href="https://pet-adoption-mern-rouge.vercel.app/">
+    <img src="https://img.shields.io/badge/🚀_Live_Demo-Visit_Site-brightgreen?style=for-the-badge" alt="Live Demo"/>
+  </a>
+</p>
 
 ---
 
 ## 📸 Screenshots
 
-<!-- Add your screenshots here -->
-<!-- ![Home Page](./screenshots/home.png) -->
-<!-- ![Pet Listing](./screenshots/pets.png) -->
-<!-- ![Admin Dashboard](./screenshots/admin.png) -->
+### 👤 User Interface
 
-> _Screenshots will be added soon._
+<details>
+<summary><strong>🏠 Landing & Home</strong></summary>
+<br/>
+
+| Landing Page | Homepage — Categories |
+|:---:|:---:|
+| ![Landing Page](./Screenshots/Landing_Page.png) | ![Homepage Categories](./Screenshots/Homepage_Categories.png) |
+
+</details>
+
+<details>
+<summary><strong>🔐 Authentication</strong></summary>
+<br/>
+
+| Login | Register |
+|:---:|:---:|
+| ![Login](./Screenshots/Login.png) | ![Register](./Screenshots/Register.png) |
+
+</details>
+
+<details>
+<summary><strong>🐶 Browsing Pets & Shops</strong></summary>
+<br/>
+
+| Pets Page | Pet Description |
+|:---:|:---:|
+| ![Pets Page](./Screenshots/Pets_Page.png) | ![Pet Description](./Screenshots/Pet_Description.png) |
+
+| Shops Page | Shop Description |
+|:---:|:---:|
+| ![Shops Page](./Screenshots/Shops_Page.png) | ![Shop Description](./Screenshots/Shop_Description.png) |
+
+</details>
+
+<details>
+<summary><strong>❤️ Wishlist & Profile</strong></summary>
+<br/>
+
+| Wishlist | Profile Page |
+|:---:|:---:|
+| ![Wishlist](./Screenshots/Wishlist_Page.png) | ![Profile Page](./Screenshots/Profile_Page.png) |
+
+| Update Profile | Address Page |
+|:---:|:---:|
+| ![Update Profile](./Screenshots/Update_Profile.png) | ![Address Page](./Screenshots/Address_Page.png) |
+
+</details>
+
+<details>
+<summary><strong>🏪 Become a Shopkeeper</strong></summary>
+<br/>
+
+| Become Shopkeeper Form |
+|:---:|
+| ![Become Shopkeeper](./Screenshots/Become_Shopkeeper_Page.png) |
+
+</details>
+
+---
+
+### 🏪 Shopkeeper Panel
+
+<details>
+<summary><strong>📊 Dashboard & Pet Management</strong></summary>
+<br/>
+
+| Shopkeeper Dashboard | Pet Listing |
+|:---:|:---:|
+| ![Shopkeeper Dashboard](./Screenshots/Shopkeeper_Dashboard.png) | ![Shopkeeper Pet Listing](./Screenshots/Shopkeeper_Pet_Listing.png) |
+
+| Add Pet Form |
+|:---:|
+| ![Add Pet](./Screenshots/Shopkeeper_add_pet.png) |
+
+</details>
+
+<details>
+<summary><strong>📋 Adoption Requests</strong></summary>
+<br/>
+
+| Adoption Requests | Request Details |
+|:---:|:---:|
+| ![Adoption Requests](./Screenshots/Shopkeeper_Adoption_Request.png) | ![Request Details](./Screenshots/Shopkeeper_Adoption_Request_Details.png) |
+
+</details>
+
+---
+
+### 🛡️ Admin Panel
+
+<details>
+<summary><strong>📂 Categories & Management</strong></summary>
+<br/>
+
+| Category Listing | Add Category Modal |
+|:---:|:---:|
+| ![Category Listing](./Screenshots/Admin_Category_Listing.png) | ![Add Category Modal](./Screenshots/Admin_Add_Category_Modal.png) |
+
+| All Shops | Pet Listing |
+|:---:|:---:|
+| ![All Shops](./Screenshots/Admin_All_Shops.png) | ![Pet Listing](./Screenshots/Admin_Pet_listing.png) |
+
+</details>
 
 ---
 
 ## ✨ Features
 
+<table>
+<tr>
+<td width="33%" valign="top">
+
 ### 👤 Users
 - Browse & search pets by category, breed, and gender
-- View detailed pet profiles with images and descriptions
+- View detailed pet profiles with images
 - Submit adoption requests to shops
 - Manage wishlists of favorite pets
-- Explore shops and view their locations on an interactive map
+- Explore shops on an interactive map
 - Apply to become a shopkeeper
+
+</td>
+<td width="33%" valign="top">
 
 ### 🏪 Shopkeepers
 - Personal dashboard with shop analytics
 - Add, edit, and manage pet listings
-- Review and approve/reject adoption requests
+- Review & approve/reject adoption requests
 - Track adoption history
 
+</td>
+<td width="33%" valign="top">
+
 ### 🛡️ Admins
-- Centralized admin dashboard with platform-wide statistics
-- Manage all users, pets, shops, and categories
-- Activate/deactivate categories and listings
-- Full oversight of the adoption ecosystem
+- Centralized admin dashboard
+- Manage users, pets, shops & categories
+- Activate/deactivate listings
+- Full platform oversight
+
+</td>
+</tr>
+</table>
 
 ### 🔐 Authentication & Security
-- JWT-based authentication with role-based access control
-- Passwords hashed with bcrypt
-- Protected routes for each user role (User · Shopkeeper · Admin)
+- JWT-based authentication with **role-based access control**
+- Passwords hashed with **bcrypt**
+- Protected routes for each role — `User` · `Shopkeeper` · `Admin`
 
 ### 📧 Notifications
-- Email notifications via Nodemailer (SMTP)
-- Bulk email support via Brevo API
+- Email notifications via **Nodemailer** (SMTP)
+- Bulk email support via **Brevo API**
 
 ---
 
@@ -120,13 +230,6 @@ Pet_Adoption_MERN/
     └── src/
         ├── controllers/        # Route handlers
         ├── models/             # Mongoose schemas
-        │   ├── User.Model.js
-        │   ├── Pet.Model.js
-        │   ├── Shop.Model.js
-        │   ├── Adoption.Model.js
-        │   ├── Category.Model.js
-        │   ├── Address.Model.js
-        │   └── Wishlist.Model.js
         ├── router/             # Express route definitions
         ├── middleware/          # Auth middleware
         ├── utils/              # Error handling, mailers
@@ -183,7 +286,7 @@ cd client
 npm install
 ```
 
-Create a `.env` file inside `client/src/` with your API base URL:
+Create a `.env` file inside `client/` with your API base URL:
 
 ```env
 VITE_API_URL=http://localhost:3000/api/v1
@@ -203,27 +306,27 @@ Visit **[http://localhost:5173](http://localhost:5173)** to view the application
 
 ## 🔌 API Endpoints
 
-| Module       | Base Route             | Description                          |
-| ------------ | ---------------------- | ------------------------------------ |
-| Auth         | `/api/v1/auth`         | Register, login, profile management  |
-| Address      | `/api/v1/address`      | CRUD operations for user addresses   |
-| Shop         | `/api/v1/shop`         | Shop registration & management       |
-| Category     | `/api/v1/category`     | Pet category management              |
-| Pet          | `/api/v1/pet`          | Pet listings CRUD                    |
-| Adoption     | `/api/v1/adoption`     | Adoption request workflow            |
-| Admin        | `/api/v1/admin`        | Admin-only management endpoints      |
-| Dashboard    | `/api/v1/dashboard`    | Dashboard analytics & stats          |
-| Stats        | `/api/v1/stats`        | Platform-wide statistics             |
+| Module    | Base Route          | Description                         |
+| --------- | ------------------- | ----------------------------------- |
+| Auth      | `/api/v1/auth`      | Register, login, profile management |
+| Address   | `/api/v1/address`   | CRUD operations for user addresses  |
+| Shop      | `/api/v1/shop`      | Shop registration & management      |
+| Category  | `/api/v1/category`  | Pet category management             |
+| Pet       | `/api/v1/pet`       | Pet listings CRUD                   |
+| Adoption  | `/api/v1/adoption`  | Adoption request workflow           |
+| Admin     | `/api/v1/admin`     | Admin-only management endpoints     |
+| Dashboard | `/api/v1/dashboard` | Dashboard analytics & stats         |
+| Stats     | `/api/v1/stats`     | Platform-wide statistics            |
 
 ---
 
 ## 🧑‍💻 User Roles
 
-| Role           | Access Level                                            |
-| -------------- | ------------------------------------------------------- |
-| **User**       | Browse pets, submit adoption requests, manage wishlist  |
-| **Shopkeeper** | Manage own shop, list pets, handle adoption requests    |
-| **Admin**      | Full platform control — users, shops, pets, categories  |
+| Role           | Access Level                                           |
+| -------------- | ------------------------------------------------------ |
+| **User**       | Browse pets, submit adoption requests, manage wishlist |
+| **Shopkeeper** | Manage own shop, list pets, handle adoption requests   |
+| **Admin**      | Full platform control — users, shops, pets, categories |
 
 ---
 
