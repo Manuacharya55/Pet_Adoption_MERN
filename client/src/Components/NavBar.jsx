@@ -65,9 +65,9 @@ const NavBar = ({ array }) => {
             alignItems: 'center',
             justifyContent: 'center',
             color: 'white',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+            overflow: 'hidden',
           }}>
-            <MdPets size={20} />
+            <img src="../../public/logo.png" alt="" />
           </div>
           <span style={{
             fontFamily: 'var(--font-heading)',

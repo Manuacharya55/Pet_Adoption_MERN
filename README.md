@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.icons8.com/fluency/96/pet.png" alt="PawHome Logo" width="80"/>
+  <img src="./client/public/logo.png" alt="Happy Paws Logo" width="100"/>
 </p>
 
 <h1 align="center">🐾 Happy Paws — Pet Adoption Platform</h1>
@@ -26,6 +26,15 @@
     <img src="https://img.shields.io/badge/🚀_Live_Demo-Visit_Site-brightgreen?style=for-the-badge" alt="Live Demo"/>
   </a>
 </p>
+
+## 🎯 Demo Access
+
+> [!TIP]
+> Click **"Fill Demo Data"** on the login page to automatically populate demo credentials and explore the app instantly — no sign-up needed!
+
+| Role | Email | Password |
+|------|-------|----------|
+| User | `demo@gmail.com` | `demo123` |
 
 ---
 

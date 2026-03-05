@@ -14,7 +14,13 @@ const Login = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
+    setValue,
   } = useForm({ resolver: zodResolver(loginSchema) });
+
+  const fillDemo = () => {
+    setValue("email", "demo@gmail.com", { shouldValidate: true });
+    setValue("password", "demo123", { shouldValidate: true });
+  };
 
   const navigate = useNavigate();
   const { setToken } = useAuth();
@@ -136,6 +142,7 @@ const Login = () => {
             onSubmit={onSubmit}
             errors={errors}
             isSubmitting={isSubmitting}
+            onFillDemo={fillDemo}
           />
 
           <div style={{
